@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Bible Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — DESIGN TOKENS
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Typography ── */
+  --font-reading: 'Crimson Pro', 'Georgia', serif;
+  --font-ui: 'DM Sans', system-ui, sans-serif;
+  --fs-verse-number: 0.65em;
+  --fs-verse-body: var(--fs-base);
+  --fs-footnote: 0.8rem;
+  --fs-chapter-title: 1.15rem;
+  --fs-book-title: 1.6rem;
+  --fs-ui-sm: 0.75rem;
+  --fs-ui-base: 0.875rem;
+  --fs-ui-lg: 1rem;
+  --fs-base: 1.125rem;
+  --lh-reading: 1.9;
+  --reading-max-width: 65ch;
+
+  /* ── Geometry ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* ── Elevation ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 20px rgba(0,0,0,0.1);
+
+  /* ── Transitions ── */
+  --theme-transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* ── Light Theme ── */
+[data-theme="light"] {
+  --color-bg: #F5F0E8;
+  --color-surface: #EDE8DE;
+  --color-surface-raised: #FAF7F2;
+  --color-text: #2C1810;
+  --color-text-secondary: #6B5B4E;
+  --color-text-muted: #9C8E80;
+  --color-verse-number: #B8A99A;
+  --color-accent: #C49A6C;
+  --color-accent-hover: #A87D52;
+  --color-highlight-yellow: #F5E6B8;
+  --color-highlight-green: #D4E8D0;
+  --color-highlight-rose: #F0D4D4;
+  --color-border: #DDD5C9;
+  --color-divider: #E8E0D4;
+  --color-nav-bg: rgba(245,240,232,0.92);
+  --color-toggle-bg: #E8E0D4;
+  --color-toggle-active: #C49A6C;
+  --color-bookmark: #C49A6C;
+  --color-overlay: rgba(44,24,16,0.4);
+}
+
+/* ── Dark Theme ── */
+[data-theme="dark"] {
+  --color-bg: #1A1714;
+  --color-surface: #242019;
+  --color-surface-raised: #2E2A23;
+  --color-text: #E8DFD0;
+  --color-text-secondary: #A89B8C;
+  --color-text-muted: #6E6358;
+  --color-verse-number: #5C5247;
+  --color-accent: #D4A96A;
+  --color-accent-hover: #E0BC82;
+  --color-highlight-yellow: #3D3520;
+  --color-highlight-green: #263324;
+  --color-highlight-rose: #3A2525;
+  --color-border: #363028;
+  --color-divider: #2E2A23;
+  --color-nav-bg: rgba(26,23,20,0.94);
+  --color-toggle-bg: #363028;
+  --color-toggle-active: #D4A96A;
+  --color-bookmark: #D4A96A;
+  --color-overlay: rgba(0,0,0,0.6);
+}
+
+/* ── Sepia Theme ── */
+[data-theme="sepia"] {
+  --color-bg: #F0E4CC;
+  --color-surface: #E6D8BC;
+  --color-surface-raised: #F6EDD8;
+  --color-text: #3E2F1C;
+  --color-text-secondary: #6E5D48;
+  --color-text-muted: #9C8B74;
+  --color-verse-number: #B5A48C;
+  --color-accent: #B8864E;
+  --color-accent-hover: #9A7040;
+  --color-highlight-yellow: #EDD8A0;
+  --color-highlight-green: #C8DCBE;
+  --color-highlight-rose: #E8C4B8;
+  --color-border: #D4C4A8;
+  --color-divider: #DED0B8;
+  --color-nav-bg: rgba(240,228,204,0.92);
+  --color-toggle-bg: #D4C4A8;
+  --color-toggle-active: #B8864E;
+  --color-bookmark: #B8864E;
+  --color-overlay: rgba(62,47,28,0.4);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  transition: var(--theme-transition);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   APP SHELL — MOBILE FRAME
+   ═══════════════════════════════════════════════════════════ */
+
+.app-shell {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (min-width: 500px) {
+  body {
+    background: #1A1714;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .app-shell {
+    border-radius: 32px;
+    min-height: 92vh;
+    max-height: 92vh;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.4);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SECTION HEADERS (Design System Demo)
+   ═══════════════════════════════════════════════════════════ */
+
+.ds-section {
+  padding: 32px 24px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.ds-section-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   1. COLOR PALETTE
+   ═══════════════════════════════════════════════════════════ */
+
+.palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  transition: var(--theme-transition);
+}
+
+.swatch-color {
+  height: 52px;
+}
+
+.swatch-info {
+  padding: 6px 8px;
+  background: var(--color-surface);
+  transition: var(--theme-transition);
+}
+
+.swatch-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  line-height: 1.2;
+  transition: var(--theme-transition);
+}
+
+.swatch-var {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.55rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+  transition: var(--theme-transition);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. TYPOGRAPHY
+   ═══════════════════════════════════════════════════════════ */
+
+.type-specimen {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.type-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.type-label {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.type-sample {
+  color: var(--color-text);
+  transition: var(--theme-transition);
+}
+
+.type-sample.book-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-book-title);
+  font-weight: 600;
+}
+
+.type-sample.chapter-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-chapter-title);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.type-sample.verse-body {
+  font-family: var(--font-reading);
+  font-size: var(--fs-base);
+  line-height: var(--lh-reading);
+  max-width: var(--reading-max-width);
+}
+
+.type-sample.verse-number-inline {
+  font-family: var(--font-ui);
+  font-size: var(--fs-verse-number);
+  font-weight: 600;
+  color: var(--color-verse-number);
+  vertical-align: super;
+  line-height: 0;
+}
+
+.type-sample.footnote {
+  font-family: var(--font-ui);
+  font-size: var(--fs-footnote);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+.type-sample.ui-label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-base);
+  font-weight: 500;
+}
+
+/* Font size slider */
+.font-size-control {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.font-size-control label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  transition: var(--theme-transition);
+}
+
+.font-size-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-toggle-bg);
+  outline: none;
+  transition: var(--theme-transition);
+}
+
+.font-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s ease;
+}
+
+.font-size-slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.font-size-value {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  font-weight: 600;
+  color: var(--color-accent);
+  min-width: 36px;
+  text-align: right;
+  transition: var(--theme-transition);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. UI COMPONENTS
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Verse Card ── */
+.verse-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-border);
+  transition: var(--theme-transition), transform 0.2s ease;
+  position: relative;
+}
+
+.verse-card.highlighted {
+  background: var(--color-highlight-yellow);
+  border-color: transparent;
+}
+
+.verse-card.highlighted.highlight-green {
+  background: var(--color-highlight-green);
+}
+
+.verse-card.highlighted.highlight-rose {
+  background: var(--color-highlight-rose);
+}
+
+.verse-card-bookmarked::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 16px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid var(--color-bookmark);
+}
+
+.verse-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-divider);
+}
+
+/* ── Navigation Bar ── */
+.chapter-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  transition: var(--theme-transition);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 8px 16px;
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
+}
+
+.nav-btn:active {
+  transform: scale(0.97);
+}
+
+.nav-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.nav-current {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-base);
+  font-weight: 600;
+  color: var(--color-text);
+  transition: var(--theme-transition);
+}
+
+/* ── Chip ── */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip.active {
+  background: var(--color-accent);
+  color: #fff;
+  border-color: var(--color-accent);
+}
+
+.chip.active:hover {
+  background: var(--color-accent-hover);
+}
+
+.chip:not(.active):hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+}
+
+.chip svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+/* ── Highlight Button Group ── */
+.highlight-group {
+  display: flex;
+  gap: 8px;
+}
+
+.highlight-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.highlight-btn:hover {
+  transform: scale(1.15);
+}
+
+.highlight-btn:active {
+  transform: scale(0.95);
+}
+
+.highlight-btn.active {
+  border-color: var(--color-text-muted);
+  box-shadow: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-text-muted);
+}
+
+.highlight-btn.yellow { background: var(--color-highlight-yellow); }
+.highlight-btn.green { background: var(--color-highlight-green); }
+.highlight-btn.rose { background: var(--color-highlight-rose); }
+
+/* ── Icon Buttons ── */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.icon-btn:hover {
+  background: var(--color-surface-raised);
+  color: var(--color-text-secondary);
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+.icon-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+}
+
+.icon-btn.active {
+  color: var(--color-bookmark);
+}
+
+/* ── Icon Bar ── */
+.icon-bar {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.components-row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. READING SCREEN (Mockup)
+   ═══════════════════════════════════════════════════════════ */
+
+.reading-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background: var(--color-nav-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-divider);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: var(--theme-transition);
+}
+
+.reading-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reading-header-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-base);
+  font-weight: 600;
+  color: var(--color-text);
+  transition: var(--theme-transition);
+}
+
+.reading-header-subtitle {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  color: var(--color-text-muted);
+  transition: var(--theme-transition);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  background: var(--color-toggle-bg);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+  gap: 2px;
+  transition: var(--theme-transition);
+}
+
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--color-text-muted);
+}
+
+.theme-toggle-btn.active {
+  background: var(--color-toggle-active);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-toggle-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+}
+
+.theme-toggle-btn svg.filled {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Reading Content */
+.reading-content {
+  flex: 1;
+  padding: 28px 24px;
+  padding-bottom: 100px;
+}
+
+.reading-book-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-book-title);
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  margin-bottom: 4px;
+  transition: var(--theme-transition);
+}
+
+.reading-chapter-label {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-sm);
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+  transition: var(--theme-transition);
+}
+
+.reading-body {
+  font-family: var(--font-reading);
+  font-size: var(--fs-base);
+  line-height: var(--lh-reading);
+  max-width: var(--reading-max-width);
+  margin: 0 auto;
+  color: var(--color-text);
+  transition: var(--theme-transition);
+}
+
+.reading-body .verse {
+  display: inline;
+}
+
+.reading-body .verse-num {
+  font-family: var(--font-ui);
+  font-size: var(--fs-verse-number);
+  font-weight: 600;
+  color: var(--color-verse-number);
+  vertical-align: super;
+  margin-right: 1px;
+  line-height: 0;
+  transition: var(--theme-transition);
+}
+
+.reading-body .verse-text {
+  transition: var(--theme-transition);
+}
+
+.reading-body .paragraph-break {
+  display: block;
+  height: 1.4em;
+}
+
+.reading-body .selah {
+  font-style: italic;
+  color: var(--color-text-secondary);
+  display: block;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 0.95em;
+  transition: var(--theme-transition);
+}
+
+.reading-footnote {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-divider);
+  font-family: var(--font-ui);
+  font-size: var(--fs-footnote);
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  transition: var(--theme-transition);
+}
+
+.reading-footnote sup {
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* Bottom Reading Bar */
+.reading-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: var(--color-nav-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid var(--color-divider);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+  transition: var(--theme-transition);
+}
+
+@media (min-width: 500px) {
+  .reading-bottom-bar {
+    border-radius: 0 0 32px 32px;
+  }
+}
+
+/* ── Overlay / Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-overlay);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-sheet {
+  background: var(--color-surface);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 24px 32px;
+  width: 100%;
+  max-width: 430px;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.modal-overlay.visible .modal-sheet {
+  transform: translateY(0);
+}
+
+@media (min-width: 500px) {
+  .modal-sheet {
+    border-radius: 24px;
+    margin-bottom: 20px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+.modal-handle {
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-text-muted);
+  margin: 0 auto 20px;
+  opacity: 0.4;
+}
+
+.modal-title {
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-lg);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 16px;
+  transition: var(--theme-transition);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY
+   ═══════════════════════════════════════════════════════════ */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease;
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell" id="app">
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 1 — COLOR PALETTE
+       ══════════════════════════════════════════════════════ -->
+  <section class="ds-section" aria-label="Paleta de Cores">
+    <div class="ds-section-title">Paleta de Cores</div>
+    <div class="palette-grid" id="paletteGrid">
+      <!-- Populated by JS -->
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 2 — TYPOGRAPHY
+       ══════════════════════════════════════════════════════ -->
+  <section class="ds-section" aria-label="Tipografia">
+    <div class="ds-section-title">Tipografia</div>
+    <div class="type-specimen">
+      <div class="type-row">
+        <span class="type-label">Título do Livro / UI — DM Sans 600</span>
+        <span class="type-sample book-title">Salmos</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Título do Capítulo — DM Sans 500</span>
+        <span class="type-sample chapter-title">Capítulo 23</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Corpo da Leitura — Crimson Pro 400</span>
+        <span class="type-sample verse-body">O Senhor é o meu pastor; nada me faltará. Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas.</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Versículo com Número — UI + Reading</span>
+        <span class="type-sample verse-body"><span class="verse-number-inline">1</span> O Senhor é o meu pastor; nada me faltará.</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Nota de Rodapé — DM Sans 400</span>
+        <span class="type-sample footnote">^a Heb. "não me faltará coisa alguma." — Texto Massorético</span>
+      </div>
+      <div class="type-row">
+        <span class="type-label">Label UI — DM Sans 500</span>
+        <span class="type-sample ui-label">Tamanho da Fonte</span>
+      </div>
+      <div class="type-row" style="margin-top: 8px;">
+        <span class="type-label">Ajuste de Tamanho</span>
+        <div class="font-size-control">
+          <label for="fontSlider">A</label>
+          <input type="range" id="fontSlider" class="font-size-slider" min="14" max="22" step="1" value="18" aria-label="Tamanho da fonte de leitura">
+          <span class="font-size-value" id="fontValue">18px</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 3 — UI COMPONENTS
+       ══════════════════════════════════════════════════════ -->
+  <section class="ds-section" aria-label="Componentes UI">
+    <div class="ds-section-title">Componentes UI</div>
+    <div class="components-row">
+
+      <!-- Verse Card -->
+      <div class="verse-card">
+        <p style="font-family: var(--font-reading); font-size: var(--fs-base); line-height: var(--lh-reading); color: var(--color-text); transition: var(--theme-transition);">
+          <span style="font-family: var(--font-ui); font-size: var(--fs-verse-number); font-weight: 600; color: var(--color-verse-number); vertical-align: super; margin-right: 1px; transition: var(--theme-transition);">1</span>
+          O Senhor é o meu pastor; nada me faltará.
+        </p>
+        <div class="verse-card-actions">
+          <div class="highlight-group">
+            <button class="highlight-btn yellow active" title="Destaque amarelo" aria-label="Destaque amarelo"></button>
+            <button class="highlight-btn green" title="Destaque verde" aria-label="Destaque verde"></button>
+            <button class="highlight-btn rose" title="Destaque rosa" aria-label="Destaque rosa"></button>
+          </div>
+          <div style="flex:1"></div>
+          <button class="icon-btn" title="Favoritar" aria-label="Favoritar versículo">
+            <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <button class="icon-btn" title="Compartilhar" aria-label="Compartilhar versículo">
+            <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Highlighted verse card -->
+      <div class="verse-card highlighted verse-card-bookmarked">
+        <p style="font-family: var(--font-reading); font-size: var(--fs-base); line-height: var(--lh-reading); color: var(--color-text); transition: var(--theme-transition);">
+          <span style="font-family: var(--font-ui); font-size: var(--fs-verse-number); font-weight: 600; color: var(--color-verse-number); vertical-align: super; margin-right: 1px; transition: var(--theme-transition);">4</span>
+          Ainda que eu andasse pelo vale da sombra da morte, não temeria mal algum, porque tu estás comigo; a tua vara e o teu cajado me consolam.
+        </p>
+      </div>
+
+      <!-- Green highlight -->
+      <div class="verse-card highlighted highlight-green">
+        <p style="font-family: var(--font-reading); font-size: var(--fs-base); line-height: var(--lh-reading); color: var(--color-text); transition: var(--theme-transition);">
+          <span style="font-family: var(--font-ui); font-size: var(--fs-verse-number); font-weight: 600; color: var(--color-verse-number); vertical-align: super; margin-right: 1px; transition: var(--theme-transition);">6</span>
+          Certamente que a bondade e a misericórdia me seguirão todos os dias da minha vida; e habitarei na casa do Senhor por longos dias.
+        </p>
+      </div>
+
+      <!-- Chapter Navigation -->
+      <div class="chapter-nav">
+        <button class="nav-btn" aria-label="Capítulo anterior">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          22
+        </button>
+        <span class="nav-current">Salmos 23</span>
+        <button class="nav-btn" aria-label="Próximo capítulo">
+          24
+          <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+      </div>
+
+      <!-- Chips -->
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button class="chip active">
+          <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Salmos
+        </button>
+        <button class="chip">Gênesis</button>
+        <button class="chip">Mateus</button>
+        <button class="chip">João</button>
+        <button class="chip">Romanos</button>
+      </div>
+
+      <!-- Icon Bar -->
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <span class="type-label">Ícones</span>
+        <div class="icon-bar">
+          <button class="icon-btn" title="Buscar" aria-label="Buscar">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+          <button class="icon-btn" title="Favoritos" aria-label="Favoritos">
+            <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <button class="icon-btn active" title="Marcado" aria-label="Marcado">
+            <svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+          </button>
+          <button class="icon-btn" title="Compartilhar" aria-label="Compartilhar">
+            <svg viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+          </button>
+          <button class="icon-btn" title="Configurações" aria-label="Configurações">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════════════════
+       SECTION 4 — READING SCREEN (Full Mockup)
+       ══════════════════════════════════════════════════════ -->
+  <section class="ds-section" style="border-bottom: none; padding-bottom: 0;" aria-label="Tela de Leitura">
+    <div class="ds-section-title">Tela de Leitura</div>
+  </section>
+
+  <div style="flex:1; display:flex; flex-direction:column; min-height:0;">
+
+    <!-- Reading Header -->
+    <header class="reading-header">
+      <div class="reading-header-left">
+        <div>
+          <div class="reading-header-title">Salmos</div>
+          <div class="reading-header-subtitle">Capítulo 23</div>
+        </div>
+      </div>
+      <div class="theme-toggle" role="radiogroup" aria-label="Tema de leitura">
+        <button class="theme-toggle-btn active" data-theme-val="light" role="radio" aria-checked="true" aria-label="Tema claro" title="Claro">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="theme-toggle-btn" data-theme-val="dark" role="radio" aria-checked="false" aria-label="Tema escuro" title="Escuro">
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="theme-toggle-btn" data-theme-val="sepia" role="radio" aria-checked="false" aria-label="Tema sépia" title="Sépia">
+          <svg viewBox="0 0 24 24" class="filled"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Reading Body -->
+    <main class="reading-content fade-in">
+      <h1 class="reading-book-title">Salmos</h1>
+      <p class="reading-chapter-label">Capítulo 23</p>
+
+      <div class="reading-body" id="readingBody">
+        <span class="verse"><span class="verse-num">1</span><span class="verse-text"> O Senhor é o meu pastor; nada me faltará.</span></span>
+        <span class="verse"><span class="verse-num">2</span><span class="verse-text"> Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas.</span></span>
+        <span class="verse"><span class="verse-num">3</span><span class="verse-text"> Refrigera a minha alma; guia-me pelas veredas da justiça, por amor do seu nome.</span></span>
+        <span class="paragraph-break"></span>
+        <span class="verse"><span class="verse-num">4</span><span class="verse-text"> Ainda que eu andasse pelo vale da sombra da morte, não temeria mal algum, porque tu estás comigo; a tua vara e o teu cajado me consolam.</span></span>
+        <span class="paragraph-break"></span>
+        <span class="verse"><span class="verse-num">5</span><span class="verse-text"> Preparas uma mesa perante mim na presença dos meus inimigos, unges a minha cabeça com óleo, o meu cálice transborda.</span></span>
+        <span class="verse"><span class="verse-num">6</span><span class="verse-text"> Certamente que a bondade e a misericórdia me seguirão todos os dias da minha vida; e habitarei na casa do Senhor por longos dias.</span></span>
+        <span class="selah">Selah</span>
+      </div>
+
+      <div class="reading-footnote">
+        <sup>a</sup> Texto da tradução de João Ferreira de Almeida — Revista e Atualizada (ARA).<br>
+        <sup>b</sup> "Selah" — termo hebraico de significado incerto; possivelmente uma indicação musical ou de meditação.
+      </div>
+    </main>
+
+    <!-- Bottom Bar -->
+    <nav class="reading-bottom-bar" aria-label="Navegação de capítulo">
+      <button class="nav-btn" aria-label="Capítulo anterior">
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;"><polyline points="15 18 9 12 15 6"/></svg>
+        Sl 22
+      </button>
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-family:var(--font-ui); font-size:var(--fs-ui-sm); color:var(--color-text-muted); transition:var(--theme-transition);">Salmos 23</span>
+      </div>
+      <button class="nav-btn" aria-label="Próximo capítulo">
+        Sl 24
+        <svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;"><polyline points="9 6 15 12 9 18"/></svg>
+      </button>
+    </nav>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SETTINGS MODAL (Font Size)
+     ══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="settingsModal" aria-hidden="true">
+  <div class="modal-sheet" role="dialog" aria-label="Configurações de leitura">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Configurações de Leitura</div>
+    <div style="margin-bottom:20px;">
+      <label for="modalFontSlider" style="font-family:var(--font-ui);font-size:var(--fs-ui-sm);color:var(--color-text-muted);display:block;margin-bottom:10px;transition:var(--theme-transition);">Tamanho da Fonte</label>
+      <div class="font-size-control">
+        <span style="font-size:12px;color:var(--color-text-muted);">A</span>
+        <input type="range" id="modalFontSlider" class="font-size-slider" min="14" max="22" step="1" value="18" aria-label="Tamanho da fonte">
+        <span style="font-size:18px;color:var(--color-text-muted);font-weight:700;">A</span>
+        <span class="font-size-value" id="modalFontValue">18px</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <label style="font-family:var(--font-ui);font-size:var(--fs-ui-sm);color:var(--color-text-muted);transition:var(--theme-transition);">Tema</label>
+      <div style="display:flex;gap:8px;">
+        <button class="chip active" data-modal-theme="light">Claro</button>
+        <button class="chip" data-modal-theme="dark">Escuro</button>
+        <button class="chip" data-modal-theme="sepia">Sépia</button>
+      </div>
+    </div>
+    <button onclick="closeSettings()" style="width:100%;margin-top:24px;padding:14px;border-radius:var(--radius-md);border:none;background:var(--color-accent);color:#fff;font-family:var(--font-ui);font-size:var(--fs-ui-base);font-weight:600;cursor:pointer;transition:background-color 0.2s ease;">Concluído</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ── Color Palette Data ── */
+  const PALETTE = [
+    { label: 'Fundo', var: '--color-bg', role: 'background' },
+    { label: 'Superfície', var: '--color-surface', role: 'card/surface' },
+    { label: 'Elevado', var: '--color-surface-raised', role: 'raised card' },
+    { label: 'Texto', var: '--color-text', role: 'body text' },
+    { label: 'Secundário', var: '--color-text-secondary', role: 'subtle text' },
+    { label: 'Mudo', var: '--color-text-muted', role: 'disabled/hint' },
+    { label: 'Nº Versículo', var: '--color-verse-number', role: 'verse num' },
+    { label: 'Acento', var: '--color-accent', role: 'brand/highlight' },
+    { label: 'Dest. Amarelo', var: '--color-highlight-yellow', role: 'highlight' },
+    { label: 'Dest. Verde', var: '--color-highlight-green', role: 'highlight' },
+    { label: 'Dest. Rosa', var: '--color-highlight-rose', role: 'highlight' },
+    { label: 'Borda', var: '--color-border', role: 'borders' },
+  ];
+
+  function renderPalette() {
+    const grid = document.getElementById('paletteGrid');
+    grid.innerHTML = '';
+    const cs = getComputedStyle(document.documentElement);
+    PALETTE.forEach(s => {
+      const color = cs.getPropertyValue(s.var).trim();
+      const swatch = document.createElement('div');
+      swatch.className = 'swatch';
+      swatch.innerHTML = `
+        <div class="swatch-color" style="background:${color}"></div>
+        <div class="swatch-info">
+          <div class="swatch-label">${s.label}</div>
+          <div class="swatch-var">${s.var}</div>
+        </div>
+      `;
+      grid.appendChild(swatch);
+    });
+  }
+
+  /* ── Theme Toggle ── */
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+      const isActive = btn.getAttribute('data-theme-val') === theme;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-checked', isActive);
+    });
+    document.querySelectorAll('[data-modal-theme]').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-modal-theme') === theme);
+    });
+    renderPalette();
+  }
+
+  document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => setTheme(btn.getAttribute('data-theme-val')));
+  });
+
+  document.querySelectorAll('[data-modal-theme]').forEach(btn => {
+    btn.addEventListener('click', () => setTheme(btn.getAttribute('data-modal-theme')));
+  });
+
+  /* ── Font Size Slider ── */
+  function setFontSize(size) {
+    document.documentElement.style.setProperty('--fs-base', size + 'px');
+    document.getElementById('fontValue').textContent = size + 'px';
+    document.getElementById('modalFontSlider').value = size;
+    document.getElementById('fontSlider').value = size;
+    document.getElementById('modalFontValue').textContent = size + 'px';
+  }
+
+  document.getElementById('fontSlider').addEventListener('input', e => setFontSize(e.target.value));
+  document.getElementById('modalFontSlider').addEventListener('input', e => setFontSize(e.target.value));
+
+  /* ── Highlight Buttons ── */
+  document.querySelectorAll('.highlight-group').forEach(group => {
+    group.querySelectorAll('.highlight-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('.highlight-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  });
+
+  /* ── Icon Button Toggle ── */
+  document.querySelectorAll('.icon-btn').forEach(btn => {
+    if (btn.querySelector('svg path[d*="19 21"]')) {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+        const svg = btn.querySelector('svg');
+        if (btn.classList.contains('active')) {
+          svg.style.fill = 'currentColor';
+          svg.style.stroke = 'none';
+        } else {
+          svg.style.fill = 'none';
+          svg.style.stroke = 'currentColor';
+        }
+      });
+    }
+  });
+
+  /* ── Chip Toggle ── */
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (chip.hasAttribute('data-modal-theme')) return;
+      chip.classList.toggle('active');
+    });
+  });
+
+  /* ── Settings Modal ── */
+  window.closeSettings = function() {
+    document.getElementById('settingsModal').classList.remove('visible');
+    document.getElementById('settingsModal').setAttribute('aria-hidden', 'true');
+  };
+
+  document.getElementById('settingsModal').addEventListener('click', function(e) {
+    if (e.target === this) closeSettings();
+  });
+
+  /* ── Init ── */
+  renderPalette();
+  setFontSize(18);
+})();
+</script>
+
+</body>
+</html>
