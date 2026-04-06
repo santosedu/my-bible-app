@@ -2,15 +2,52 @@ import { useBibleStore } from '@/stores'
 import { useSidebar } from './SidebarContext'
 import { useNavigate } from 'react-router'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
+import { translations } from '@/data/translations'
+import type { TranslationId } from '@/types'
+import { useCallback, useRef } from 'react'
 
 export function Header() {
-  const { bookId, chapter } = useBibleStore()
+  const bookId = useBibleStore((s) => s.bookId)
+  const chapter = useBibleStore((s) => s.chapter)
+  const activeTranslation = useBibleStore((s) => s.activeTranslation)
+  const setActiveTranslation = useBibleStore((s) => s.setActiveTranslation)
   const { toggle } = useSidebar()
   const navigate = useNavigate()
+  const selectorRef = useRef<HTMLDivElement>(null)
 
-  const bookName = bookId
-    ? useBibleStore.getState().bookId
-    : null
+  const handleTranslationSelect = useCallback(
+    (id: TranslationId) => {
+      setActiveTranslation(id)
+    },
+    [setActiveTranslation],
+  )
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent, currentIndex: number) => {
+      const chips = selectorRef.current?.querySelectorAll('button')
+      if (!chips) return
+
+      let nextIndex = currentIndex
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        e.preventDefault()
+        nextIndex = (currentIndex + 1) % chips.length
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        e.preventDefault()
+        nextIndex = (currentIndex - 1 + chips.length) % chips.length
+      } else if (e.key === 'Home') {
+        e.preventDefault()
+        nextIndex = 0
+      } else if (e.key === 'End') {
+        e.preventDefault()
+        nextIndex = chips.length - 1
+      }
+
+      if (nextIndex !== currentIndex) {
+        (chips[nextIndex] as HTMLButtonElement).focus()
+      }
+    },
+    [],
+  )
 
   return (
     <header
@@ -40,11 +77,9 @@ export function Header() {
             </svg>
           </button>
           <div className="font-ui text-sm font-semibold text-[var(--color-text)]">
-            {bookName ? (
+            {bookId ? (
               <span data-testid="header-location">
-                {bookId && (
-                  <span className="capitalize">{bookId.replace(/-/g, ' ')}</span>
-                )}
+                <span className="capitalize">{bookId.replace(/-/g, ' ')}</span>
                 {chapter && (
                   <span className="text-[var(--color-text-muted)] ml-1">
                     {chapter}
@@ -77,9 +112,32 @@ export function Header() {
               <line x1="12.5" y1="12.5" x2="17" y2="17" />
             </svg>
           </button>
-          <span className="text-xs text-[var(--color-text-muted)] hidden sm:inline">
-            ARA
-          </span>
+          <div
+            ref={selectorRef}
+            role="radiogroup"
+            aria-label="Selecione a tradução da Bíblia"
+            data-testid="header-translation-selector"
+            className="hidden sm:flex gap-1"
+          >
+            {translations.map((t, index) => {
+              const isActive = activeTranslation === t.id
+              return (
+                <button
+                  key={t.id}
+                  data-testid={`header-translation-chip-${t.id}`}
+                  onClick={() => handleTranslationSelect(t.id)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  className={`chip ${isActive ? 'active' : ''}`}
+                  role="radio"
+                  aria-checked={isActive}
+                  aria-label={t.name}
+                  tabIndex={isActive ? 0 : -1}
+                >
+                  {t.shortName}
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
     </header>

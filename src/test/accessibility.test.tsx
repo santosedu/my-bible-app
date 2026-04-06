@@ -23,7 +23,7 @@ beforeEach(() => {
   useBibleStore.setState({
     bookId: null,
     chapter: null,
-    activeTranslation: 'ara',
+    activeTranslation: 'nvi',
     comparisonTranslations: [],
     comparisonMode: false,
   })

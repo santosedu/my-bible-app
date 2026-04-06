@@ -135,8 +135,8 @@ function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
   )
 
   const verses: Verse[] = useMemo(
-    () => getChapterSync(bookId, chapterNum),
-    [bookId, chapterNum],
+    () => getChapterSync(bookId, chapterNum, activeTranslation),
+    [bookId, chapterNum, activeTranslation],
   )
 
   const bookName = useMemo(() => {
