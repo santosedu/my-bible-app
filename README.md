@@ -1,73 +1,92 @@
-# React + TypeScript + Vite
+# My Bible App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Um aplicativo de leitura bíblica completo, construído com React, TypeScript e Vite. Interface em português brasileiro.
 
-Currently, two official plugins are available:
+## Funcionalidades
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Leitura
 
-## React Compiler
+- **66 livros** da Bíblia (Antigo e Novo Testamento)
+- **3 traduções** em português: ARA (Almeida Revista e Atualizada), ACF (Almeida Corrigida Fiel) e NVI (Nova Versão Internacional)
+- Seleção de versículos com clique (Shift+Click para selecionar intervalos)
+- Modo de **comparação** de traduções lado a lado (2 ou 3 traduções simultâneas)
+- Marcação automática de capítulo como lido ao rolar até o final
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Ferramentas de Estudo
 
-## Expanding the ESLint configuration
+- **Destaques** em 5 cores (amarelo, verde, azul, vermelho, roxo) aplicados a versículos ou intervalos
+- **Favoritos** com rótulo opcional e navegação rápida
+- **Notas** anexadas a versículos com editor inline (Ctrl+Enter para salvar)
+- **Referências cruzadas** automáticas (top 3 por versículo) com visualização do texto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Busca
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Busca em texto completo com índice invertido
+- Suporte a palavras isoladas e frases
+- Resultados agrupados por livro com termos destacados
+- Limite de 50 resultados ordenados por relevância
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Progresso
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Rastreamento automático de capítulos lidos
+- Barra de progresso geral (capítulos lidos / total)
+- Progresso individual por livro
+- Indicadores visuais na grade de capítulos
+
+### Temas
+
+- 7 temas disponíveis: Claro, Escuro, Sépia, Verde, Azul, Laranja e Sistema (segue o tema do SO)
+- Transições suaves entre temas
+- Tipografia dedicada: Crimson Pro (leitura) e DM Sans (interface)
+
+### Responsividade e Acessibilidade
+
+- Layout adaptável com sidebar deslizante no mobile e barra de navegação inferior
+- Comparação em colunas no desktop e abas no mobile
+- Navegação por teclado e suporte a ARIA
+- Respeita `prefers-reduced-motion`
+
+## Rotas
+
+| Rota | Descrição |
+|------|-----------|
+| `/` | Redireciona para o último capítulo lido ou Gênesis |
+| `/:livro` | Grade de seleção de capítulos |
+| `/:livro/:capitulo` | Leitor do capítulo |
+| `/search?q=...` | Busca textual |
+| `/progress` | Painel de progresso |
+
+## Tecnologias
+
+- **React 19** + **TypeScript**
+- **Vite** (build e dev server)
+- **Zustand** (gerenciamento de estado com persistência em localStorage)
+- **Tailwind CSS v4** (estilização)
+- **Vitest** + **Testing Library** (testes)
+- **React Router v7** (navegação)
+
+## Instalação e Uso
+
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+
+# Rodar testes
+npm run test
+
+# Gerar relatório de cobertura
+npm run test:coverage
+
+# Build de produção
+npm run build
+
+# Visualizar build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Persistência de Dados
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Todos os dados do usuário (tradução ativa, tema, destaques, favoritos, notas e progresso) são persistidos automaticamente no `localStorage` do navegador.
