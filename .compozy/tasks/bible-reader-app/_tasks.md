@@ -21,4 +21,4 @@
 | 15 | Bookmarks Feature | completed | medium | task_06, task_07 |
 | 16 | Reading Progress Tracking | completed | medium | task_06, task_07 |
 | 17 | Theme System: Dark/Light/Sepia with OS Detection and Toggle | completed | medium | task_02, task_06 |
-| 18 | Polish: Responsive Refinement, Accessibility, and Visual Finishing | pending | high | task_08, task_10, task_11, task_12, task_13, task_14, task_15, task_16, task_17 |
+| 18 | Polish: Responsive Refinement, Accessibility, and Visual Finishing | completed | high | task_08, task_10, task_11, task_12, task_13, task_14, task_15, task_16, task_17 |

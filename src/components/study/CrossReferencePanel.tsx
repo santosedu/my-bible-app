@@ -70,10 +70,14 @@ export function CrossReferencePanel({ references, isOpen, onClose }: CrossRefere
   return (
     <div
       data-testid="cross-reference-panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cross-reference-title"
       className="flex flex-col"
     >
       <div className="mb-2 flex items-center justify-between">
         <h2
+          id="cross-reference-title"
           data-testid="cross-reference-panel-title"
           className="font-ui text-sm font-semibold text-[var(--color-text)]"
         >

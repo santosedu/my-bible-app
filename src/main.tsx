@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router'
 import { AppShell } from '@/components/layout/AppShell'
 import { ThemeInitializer } from '@/components/layout/ThemeInitializer'
+import { ErrorBoundary } from '@/components/layout/ErrorBoundary'
 import {
   RootRedirect,
   BookRedirect,
@@ -23,15 +24,17 @@ export function AppLayout() {
 
 export function App() {
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<RootRedirect />} />
-        <Route path="/:bookId" element={<BookRedirect />} />
-        <Route path="/:bookId/:chapter" element={<ChapterPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/progress" element={<ProgressPage />} />
-      </Route>
-    </Routes>
+    <ErrorBoundary>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<RootRedirect />} />
+          <Route path="/:bookId" element={<BookRedirect />} />
+          <Route path="/:bookId/:chapter" element={<ChapterPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/progress" element={<ProgressPage />} />
+        </Route>
+      </Routes>
+    </ErrorBoundary>
   )
 }
 
