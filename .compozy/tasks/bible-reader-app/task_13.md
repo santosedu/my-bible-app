@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 title: "Cross-References Feature"
 type: frontend
 complexity: high
@@ -34,12 +34,12 @@ Implement cross-reference display and navigation. Each verse with available cros
 </requirements>
 
 ## Subtasks
-- [ ] 13.1 Build CrossReferenceIndicator component (small icon on verses with cross-refs)
-- [ ] 13.2 Build CrossReferencePanel component displaying referenced verses with text
-- [ ] 13.3 Connect to BibleData.getCrossReferences() for data fetching
-- [ ] 13.4 Implement navigation to referenced passages via React Router
-- [ ] 13.5 Handle empty cross-reference state gracefully
-- [ ] 13.6 Integrate indicator into VerseBlock rendering
+- [x] 13.1 Build CrossReferenceIndicator component (small icon on verses with cross-refs)
+- [x] 13.2 Build CrossReferencePanel component displaying referenced verses with text
+- [x] 13.3 Connect to BibleData.getCrossReferences() for data fetching
+- [x] 13.4 Implement navigation to referenced passages via React Router
+- [x] 13.5 Handle empty cross-reference state gracefully
+- [x] 13.6 Integrate indicator into VerseBlock rendering
 
 ## Implementation Details
 
@@ -71,23 +71,23 @@ Cross-reference data coverage may be limited (primarily New Testament). The pane
 
 ## Tests
 - Unit tests:
-  - [ ] CrossReferenceIndicator renders only when cross-references exist for a verse
-  - [ ] CrossReferenceIndicator does not render when no cross-references exist
-  - [ ] CrossReferencePanel displays all referenced verses with book/chapter/verse
-  - [ ] CrossReferencePanel displays verse text for each reference
-  - [ ] Clicking a reference navigates to the correct /:bookId/:chapter route
-  - [ ] Panel with no cross-references shows empty state message
+  - [x] CrossReferenceIndicator renders only when cross-references exist for a verse
+  - [x] CrossReferenceIndicator does not render when no cross-references exist
+  - [x] CrossReferencePanel displays all referenced verses with book/chapter/verse
+  - [x] CrossReferencePanel displays verse text for each reference
+  - [x] Clicking a reference navigates to the correct /:bookId/:chapter route
+  - [x] Panel with no cross-references shows empty state message
 - Integration tests:
-  - [ ] Tapping indicator opens panel with correct cross-references for the verse
-  - [ ] Navigating to a cross-reference and back preserves the original reading position
-  - [ ] Cross-reference panel closes on Escape key or outside tap
+  - [x] Tapping indicator opens panel with correct cross-references for the verse
+  - [x] Navigating to a cross-reference and back preserves the original reading position
+  - [x] Cross-reference panel closes on Escape key or outside tap
 - Test coverage target: >=80%
 - All tests must pass
 
 ## Success Criteria
-- All tests passing
-- Test coverage >=80%
-- Cross-reference indicators appear on all verses with references
-- Panel shows correct referenced verses with text
-- Navigation to referenced passages works
-- Empty state handled gracefully
+- [x] All tests passing
+- [x] Test coverage >=80%
+- [x] Cross-reference indicators appear on all verses with references
+- [x] Panel shows correct referenced verses with text
+- [x] Navigation to referenced passages works
+- [x] Empty state handled gracefully

@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useParams } from 'react-router'
-import { getChapterSync, getBook } from '@/data/bibleData'
+import { getChapterSync, getBook, getCrossReferences } from '@/data/bibleData'
 import { translations } from '@/data/translations'
 import { useBibleStore, useProgressStore, useStudyStore } from '@/stores'
 import { VerseBlock } from './VerseBlock'
 import { ComparisonView } from './ComparisonView'
 import { HighlightPicker } from '@/components/study/HighlightPicker'
 import { NoteEditor } from '@/components/study/NoteEditor'
-import type { Verse, TranslationId, Highlight, HighlightColor, Note } from '@/types'
+import { CrossReferencePanel } from '@/components/study/CrossReferencePanel'
+import type { Verse, TranslationId, Highlight, HighlightColor, Note, BibleRef } from '@/types'
 
 function getHighlightForVerse(
   highlights: Highlight[],
@@ -149,6 +150,10 @@ function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
   const [selectionRange, setSelectionRange] = useState<{
     start: number
     end: number
+  } | null>(null)
+  const [crossRefPanel, setCrossRefPanel] = useState<{
+    verse: number
+    references: BibleRef[]
   } | null>(null)
   const sentinelRef = useRef<HTMLDivElement>(null)
 
@@ -358,6 +363,21 @@ function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
     [chapterNotes, bookId, chapterNum],
   )
 
+  const getVerseCrossReferences = useCallback(
+    (num: number): BibleRef[] => getCrossReferences(bookId, chapterNum, num),
+    [bookId, chapterNum],
+  )
+
+  const handleCrossReferenceClick = useCallback(
+    (verseNumber: number) => {
+      const refs = getCrossReferences(bookId, chapterNum, verseNumber)
+      if (refs.length > 0) {
+        setCrossRefPanel({ verse: verseNumber, references: refs })
+      }
+    },
+    [bookId, chapterNum],
+  )
+
   if (verses.length === 0) {
     return (
       <div data-testid="chapter-reader-empty" className="py-12 text-center">
@@ -460,10 +480,17 @@ function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
                 isSelected={isVerseSelected(verse.number)}
                 highlightColor={getVerseHighlightColor(verse.number)}
                 hasNote={getVerseHasNote(verse.number)}
+                hasCrossReferences={getVerseCrossReferences(verse.number).length > 0}
                 onSelect={handleVerseSelect}
+                onCrossReferenceClick={() => handleCrossReferenceClick(verse.number)}
               />
             ))}
           </div>
+          <CrossReferencePanel
+            references={crossRefPanel?.references ?? []}
+            isOpen={crossRefPanel !== null}
+            onClose={() => setCrossRefPanel(null)}
+          />
         </>
       )}
       <div ref={sentinelRef} className="h-1" data-testid="scroll-sentinel" />

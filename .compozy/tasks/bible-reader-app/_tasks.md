@@ -16,7 +16,7 @@
 | 10 | Multi-Translation Comparison Mode | completed | high | task_09 |
 | 11 | Verse Highlights Feature | completed | medium | task_06, task_09 |
 | 12 | Verse Notes Feature | completed | medium | task_06, task_09 |
-| 13 | Cross-References Feature | pending | high | task_03, task_07 |
+| 13 | Cross-References Feature | completed | high | task_03, task_07 |
 | 14 | Full-Text Search Feature | pending | medium | task_03, task_07 |
 | 15 | Bookmarks Feature | pending | medium | task_06, task_07 |
 | 16 | Reading Progress Tracking | pending | medium | task_06, task_07 |

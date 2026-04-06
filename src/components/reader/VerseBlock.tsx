@@ -1,12 +1,15 @@
 import { memo } from 'react'
 import type { Verse, HighlightColor } from '@/types'
+import { CrossReferenceIndicator } from '@/components/study/CrossReferenceIndicator'
 
 interface VerseBlockProps {
   verse: Verse
   isSelected: boolean
   highlightColor?: HighlightColor | null
   hasNote?: boolean
+  hasCrossReferences?: boolean
   onSelect: (verseNumber: number, shiftKey: boolean) => void
+  onCrossReferenceClick?: () => void
 }
 
 export const VerseBlock = memo(function VerseBlock({
@@ -14,7 +17,9 @@ export const VerseBlock = memo(function VerseBlock({
   isSelected,
   highlightColor,
   hasNote,
+  hasCrossReferences,
   onSelect,
+  onCrossReferenceClick,
 }: VerseBlockProps) {
   const bgClass = highlightColor
     ? `bg-[var(--color-highlight-${highlightColor})]`
@@ -71,6 +76,10 @@ export const VerseBlock = memo(function VerseBlock({
           </svg>
         </span>
       )}
+      <CrossReferenceIndicator
+        onClick={onCrossReferenceClick ?? (() => {})}
+        hasCrossReferences={hasCrossReferences ?? false}
+      />
     </span>
   )
 })
