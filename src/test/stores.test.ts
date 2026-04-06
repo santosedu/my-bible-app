@@ -232,6 +232,15 @@ describe('themeStore', () => {
 
     useThemeStore.getState().setTheme('dark')
     expect(useThemeStore.getState().getResolvedTheme()).toBe('dark')
+
+    useThemeStore.getState().setTheme('green')
+    expect(useThemeStore.getState().getResolvedTheme()).toBe('green')
+
+    useThemeStore.getState().setTheme('blue')
+    expect(useThemeStore.getState().getResolvedTheme()).toBe('blue')
+
+    useThemeStore.getState().setTheme('orange')
+    expect(useThemeStore.getState().getResolvedTheme()).toBe('orange')
   })
 
   it('resolved theme handles system preference', () => {

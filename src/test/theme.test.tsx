@@ -16,12 +16,15 @@ function renderWithRouter(component: React.ReactNode) {
 }
 
 describe('ThemeToggle', () => {
-  it('renders four theme options', () => {
+  it('renders seven theme options', () => {
     renderWithRouter(<ThemeToggle />)
     
     expect(screen.getByRole('radio', { name: /claro/i })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: /escuro/i })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: /sepia/i })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: /verde/i })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: /azul/i })).toBeInTheDocument()
+    expect(screen.getByRole('radio', { name: /laranja/i })).toBeInTheDocument()
     expect(screen.getByRole('radio', { name: /sistema/i })).toBeInTheDocument()
   })
 
@@ -66,6 +69,27 @@ describe('ThemeToggle', () => {
     fireEvent.click(screen.getByRole('radio', { name: /sistema/i }))
     expect(useThemeStore.getState().preference).toBe('system')
   })
+
+  it('selecting green theme updates store', () => {
+    renderWithRouter(<ThemeToggle />)
+    
+    fireEvent.click(screen.getByRole('radio', { name: /verde/i }))
+    expect(useThemeStore.getState().preference).toBe('green')
+  })
+
+  it('selecting blue theme updates store', () => {
+    renderWithRouter(<ThemeToggle />)
+    
+    fireEvent.click(screen.getByRole('radio', { name: /azul/i }))
+    expect(useThemeStore.getState().preference).toBe('blue')
+  })
+
+  it('selecting orange theme updates store', () => {
+    renderWithRouter(<ThemeToggle />)
+    
+    fireEvent.click(screen.getByRole('radio', { name: /laranja/i }))
+    expect(useThemeStore.getState().preference).toBe('orange')
+  })
 })
 
 describe('ThemeInitializer', () => {
@@ -109,6 +133,27 @@ describe('ThemeInitializer', () => {
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
     
     window.matchMedia = originalMatchMedia
+  })
+
+  it('sets data-theme to green when green theme is selected', () => {
+    useThemeStore.getState().setTheme('green')
+    renderWithRouter(<ThemeInitializer />)
+    
+    expect(document.documentElement.getAttribute('data-theme')).toBe('green')
+  })
+
+  it('sets data-theme to blue when blue theme is selected', () => {
+    useThemeStore.getState().setTheme('blue')
+    renderWithRouter(<ThemeInitializer />)
+    
+    expect(document.documentElement.getAttribute('data-theme')).toBe('blue')
+  })
+
+  it('sets data-theme to orange when orange theme is selected', () => {
+    useThemeStore.getState().setTheme('orange')
+    renderWithRouter(<ThemeInitializer />)
+    
+    expect(document.documentElement.getAttribute('data-theme')).toBe('orange')
   })
 })
 
@@ -170,6 +215,36 @@ describe('theme persistence', () => {
     
     const parsed = JSON.parse(serialized!)
     expect(parsed.state.preference).toBe('sepia')
+  })
+
+  it('persists green theme across page reload', () => {
+    useThemeStore.getState().setTheme('green')
+    
+    const serialized = localStorage.getItem('bible-app-theme')
+    expect(serialized).toBeDefined()
+    
+    const parsed = JSON.parse(serialized!)
+    expect(parsed.state.preference).toBe('green')
+  })
+
+  it('persists blue theme across page reload', () => {
+    useThemeStore.getState().setTheme('blue')
+    
+    const serialized = localStorage.getItem('bible-app-theme')
+    expect(serialized).toBeDefined()
+    
+    const parsed = JSON.parse(serialized!)
+    expect(parsed.state.preference).toBe('blue')
+  })
+
+  it('persists orange theme across page reload', () => {
+    useThemeStore.getState().setTheme('orange')
+    
+    const serialized = localStorage.getItem('bible-app-theme')
+    expect(serialized).toBeDefined()
+    
+    const parsed = JSON.parse(serialized!)
+    expect(parsed.state.preference).toBe('orange')
   })
 
   it('manual override persists and overrides OS preference', () => {

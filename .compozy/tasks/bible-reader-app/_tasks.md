@@ -24,5 +24,5 @@
 | 18 | Polish: Responsive Refinement, Accessibility, and Visual Finishing | completed | high | task_08, task_10, task_11, task_12, task_13, task_14, task_15, task_16, task_17 |
 | 19 | Chapter Selection View: Grid Component and Route | completed | medium | — |
 | 20 | Bible Version Selection with NVI as Default | completed | medium | — |
-| 21 | Define 3 New Color Palettes and CSS Theme Blocks | pending | medium | — |
-| 22 | Integrate New Themes into Store, Toggle UI, and Tests | pending | medium | task_21 |
+| 21 | Define 3 New Color Palettes and CSS Theme Blocks | completed | medium | — |
+| 22 | Integrate New Themes into Store, Toggle UI, and Tests | completed | medium | task_21 |

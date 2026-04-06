@@ -61,6 +61,51 @@ const SEPIA_THEME: Record<string, string> = {
   border: '#D4C8AE',
 }
 
+const GREEN_THEME: Record<string, string> = {
+  bg: '#F8F9FA',
+  surface: '#E4EBE6',
+  'surface-raised': '#D8F3DC',
+  text: '#081C15',
+  'text-secondary': '#3D5A4A',
+  'text-muted': '#6B8B7A',
+  'verse-number': '#9AB0A2',
+  accent: '#2D6A4F',
+  'highlight-yellow': '#F5E6B8',
+  'highlight-green': '#D8F3DC',
+  'highlight-rose': '#F0D4D4',
+  border: '#D4DDD4',
+}
+
+const BLUE_THEME: Record<string, string> = {
+  bg: '#FAF9F6',
+  surface: '#DCE8EE',
+  'surface-raised': '#ADE8F4',
+  text: '#03045E',
+  'text-secondary': '#2A4570',
+  'text-muted': '#5A7085',
+  'verse-number': '#8A9BA8',
+  accent: '#0077B6',
+  'highlight-yellow': '#F5E6B8',
+  'highlight-green': '#D4E8D0',
+  'highlight-rose': '#F0D4D4',
+  border: '#CED8DF',
+}
+
+const ORANGE_THEME: Record<string, string> = {
+  bg: '#FFFDF9',
+  surface: '#FEF3E2',
+  'surface-raised': '#FFEDD0',
+  text: '#3D2800',
+  'text-secondary': '#704D2A',
+  'text-muted': '#9A7560',
+  'verse-number': '#B8947A',
+  accent: '#CC6A00',
+  'highlight-yellow': '#FFE8B8',
+  'highlight-green': '#E8F0D8',
+  'highlight-rose': '#FCE8E8',
+  border: '#EDE3D6',
+}
+
 function getComputedToken(tokenName: string, element: HTMLElement): string {
   return getComputedStyle(element).getPropertyValue(tokenName).trim()
 }
@@ -112,6 +157,33 @@ describe('Design System: CSS Custom Properties', () => {
       const cssVar = CSS_TOKENS[name]
       const actual = getComputedToken(cssVar, root)
       expect(actual, `Sepia token ${name} should be ${expected}`).toBe(expected)
+    }
+  })
+
+  it('green theme overrides all color tokens when data-theme="green" is set', () => {
+    root.setAttribute('data-theme', 'green')
+    for (const [name, expected] of Object.entries(GREEN_THEME)) {
+      const cssVar = CSS_TOKENS[name]
+      const actual = getComputedToken(cssVar, root)
+      expect(actual, `Green token ${name} should be ${expected}`).toBe(expected)
+    }
+  })
+
+  it('blue theme overrides all color tokens when data-theme="blue" is set', () => {
+    root.setAttribute('data-theme', 'blue')
+    for (const [name, expected] of Object.entries(BLUE_THEME)) {
+      const cssVar = CSS_TOKENS[name]
+      const actual = getComputedToken(cssVar, root)
+      expect(actual, `Blue token ${name} should be ${expected}`).toBe(expected)
+    }
+  })
+
+  it('orange theme overrides all color tokens when data-theme="orange" is set', () => {
+    root.setAttribute('data-theme', 'orange')
+    for (const [name, expected] of Object.entries(ORANGE_THEME)) {
+      const cssVar = CSS_TOKENS[name]
+      const actual = getComputedToken(cssVar, root)
+      expect(actual, `Orange token ${name} should be ${expected}`).toBe(expected)
     }
   })
 
@@ -167,9 +239,12 @@ describe('Design System: CSS Custom Properties', () => {
     expect(style.getPropertyValue('--radius-circle').trim()).toBe('32px')
   })
 
-  it('all three theme selectors are present in the CSS', () => {
+  it('all six theme selectors are present in the CSS', () => {
     const cssString = getAllStyleSheetsText()
     expect(cssString).toContain('[data-theme="dark"]')
     expect(cssString).toContain('[data-theme="sepia"]')
+    expect(cssString).toContain('[data-theme="green"]')
+    expect(cssString).toContain('[data-theme="blue"]')
+    expect(cssString).toContain('[data-theme="orange"]')
   })
 })

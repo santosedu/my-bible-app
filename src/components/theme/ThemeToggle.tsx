@@ -39,6 +39,35 @@ const themeOptions: { value: ThemePreference; label: string; icon: React.ReactNo
     ),
   },
   {
+    value: 'green',
+    label: 'Verde',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M9 2v14M2 9h14" />
+        <circle cx="9" cy="9" r="6" />
+      </svg>
+    ),
+  },
+  {
+    value: 'blue',
+    label: 'Azul',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M9 3l6 3v6l-6 3-6-3V6l6-3z" />
+      </svg>
+    ),
+  },
+  {
+    value: 'orange',
+    label: 'Laranja',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="9" cy="9" r="7" />
+        <circle cx="9" cy="9" r="3" />
+      </svg>
+    ),
+  },
+  {
     value: 'system',
     label: 'Sistema',
     icon: (
