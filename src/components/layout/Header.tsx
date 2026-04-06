@@ -1,6 +1,7 @@
 import { useBibleStore } from '@/stores'
 import { useSidebar } from './SidebarContext'
 import { useNavigate } from 'react-router'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 export function Header() {
   const { bookId, chapter } = useBibleStore()
@@ -56,6 +57,7 @@ export function Header() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           <button
             onClick={() => navigate('/search')}
             className="btn-ghost hidden lg:flex"
