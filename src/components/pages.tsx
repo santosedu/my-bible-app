@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useBibleStore } from '@/stores'
 import { ChapterReader } from '@/components/reader/ChapterReader'
+import { ProgressPage as ProgressPageComponent } from '@/components/progress/ProgressPage'
 
 export function RootRedirect() {
   const navigate = useNavigate()
@@ -36,4 +37,8 @@ export function BookRedirect() {
 
 export function ChapterPage() {
   return <ChapterReader />
+}
+
+export function ProgressPage() {
+  return <ProgressPageComponent />
 }

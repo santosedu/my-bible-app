@@ -19,6 +19,6 @@
 | 13 | Cross-References Feature | completed | high | task_03, task_07 |
 | 14 | Full-Text Search Feature | pending | medium | task_03, task_07 |
 | 15 | Bookmarks Feature | completed | medium | task_06, task_07 |
-| 16 | Reading Progress Tracking | pending | medium | task_06, task_07 |
+| 16 | Reading Progress Tracking | completed | medium | task_06, task_07 |
 | 17 | Theme System: Dark/Light/Sepia with OS Detection and Toggle | pending | medium | task_02, task_06 |
 | 18 | Polish: Responsive Refinement, Accessibility, and Visual Finishing | pending | high | task_08, task_10, task_11, task_12, task_13, task_14, task_15, task_16, task_17 |

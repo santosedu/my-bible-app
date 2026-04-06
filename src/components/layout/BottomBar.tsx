@@ -30,13 +30,15 @@ export function BottomBar() {
           <span className="text-[10px] font-ui text-[var(--color-text-muted)]">Buscar</span>
         </button>
         <button
+          onClick={() => navigate('/progress')}
           className="btn-ghost flex flex-col items-center gap-0.5"
-          aria-label="Favoritos"
+          aria-label="Progresso"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M5 3h10l1 6.5-4 3.5 1 6-5-2.5-5 2.5 1-6-4-3.5z" />
+            <path d="M3 16l4-4 4 4 6-6" />
+            <path d="M17 10v4h-4" />
           </svg>
-          <span className="text-[10px] font-ui text-[var(--color-text-muted)]">Favoritos</span>
+          <span className="text-[10px] font-ui text-[var(--color-text-muted)]">Progresso</span>
         </button>
       </div>
     </nav>

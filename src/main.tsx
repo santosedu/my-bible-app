@@ -7,6 +7,7 @@ import {
   RootRedirect,
   BookRedirect,
   ChapterPage,
+  ProgressPage,
 } from '@/components/pages'
 import { SearchPage } from '@/components/search/SearchPage'
 import './index.css'
@@ -28,6 +29,7 @@ export function App() {
         <Route path="/:bookId" element={<BookRedirect />} />
         <Route path="/:bookId/:chapter" element={<ChapterPage />} />
         <Route path="/search" element={<SearchPage />} />
+        <Route path="/progress" element={<ProgressPage />} />
       </Route>
     </Routes>
   )
