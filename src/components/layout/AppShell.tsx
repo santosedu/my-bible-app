@@ -6,7 +6,7 @@ import { BookList } from '@/components/navigation/BookList'
 import { BookmarksPanel } from '@/components/study/BookmarksPanel'
 
 function Sidebar() {
-  const { isOpen, close } = useSidebar()
+  const { isOpen, close, sidebarRef } = useSidebar()
   return (
     <>
       {isOpen && (
@@ -20,10 +20,12 @@ function Sidebar() {
         />
       )}
       <aside
+        ref={sidebarRef}
         className={`fixed top-0 left-0 z-40 h-full w-72 overflow-y-auto border-r border-[var(--color-border)] bg-[var(--color-bg)] transition-transform duration-300 ease-in-out lg:relative lg:z-auto lg:translate-x-0 lg:border-r ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         data-testid="sidebar"
+        aria-label="Lista de livros"
       >
         <div className="p-4 pt-16 lg:pt-4">
           <BookList />

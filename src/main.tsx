@@ -6,7 +6,7 @@ import { ThemeInitializer } from '@/components/layout/ThemeInitializer'
 import { ErrorBoundary } from '@/components/layout/ErrorBoundary'
 import {
   RootRedirect,
-  BookRedirect,
+  ChapterSelectionPage,
   ChapterPage,
   ProgressPage,
 } from '@/components/pages'
@@ -28,7 +28,7 @@ export function App() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<RootRedirect />} />
-          <Route path="/:bookId" element={<BookRedirect />} />
+          <Route path="/:bookId" element={<ChapterSelectionPage />} />
           <Route path="/:bookId/:chapter" element={<ChapterPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/progress" element={<ProgressPage />} />
