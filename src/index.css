@@ -296,6 +296,13 @@ body {
   color: var(--color-bookmark);
 }
 
+.note-indicator {
+  display: inline-flex;
+  color: var(--color-text-muted);
+  vertical-align: middle;
+  margin-left: 0.125rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;
