@@ -3,6 +3,7 @@ import { useParams } from 'react-router'
 import { getChapterSync, getBook, getCrossReferences } from '@/data/bibleData'
 import { translations } from '@/data/translations'
 import { useBibleStore, useProgressStore, useStudyStore } from '@/stores'
+import { getHighlightForVerse } from '@/utils/highlights'
 import { VerseBlock } from './VerseBlock'
 import { ComparisonView } from './ComparisonView'
 import { HighlightPicker } from '@/components/study/HighlightPicker'
@@ -10,25 +11,6 @@ import { NoteEditor } from '@/components/study/NoteEditor'
 import { CrossReferencePanel } from '@/components/study/CrossReferencePanel'
 import { BookmarkButton } from '@/components/study/BookmarkButton'
 import type { Verse, TranslationId, Highlight, HighlightColor, Note, BibleRef } from '@/types'
-
-function getHighlightForVerse(
-  highlights: Highlight[],
-  bookId: string,
-  chapter: number,
-  verseNumber: number,
-): HighlightColor | null {
-  for (const h of highlights) {
-    if (
-      h.bookId === bookId &&
-      h.chapter === chapter &&
-      verseNumber >= h.startVerse &&
-      verseNumber <= h.endVerse
-    ) {
-      return h.color
-    }
-  }
-  return null
-}
 
 function getHighlightCoveringRange(
   highlights: Highlight[],

@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router'
+import { useSidebar } from './SidebarContext'
 
 export function BottomBar() {
   const navigate = useNavigate()
+  const { toggle } = useSidebar()
   return (
     <nav
       className="sticky bottom-0 z-50 border-t border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-[12px] lg:hidden"
@@ -9,6 +11,7 @@ export function BottomBar() {
     >
       <div className="flex items-center justify-around h-14 px-4">
         <button
+          onClick={toggle}
           className="btn-ghost flex flex-col items-center gap-0.5"
           aria-label="Livros"
         >

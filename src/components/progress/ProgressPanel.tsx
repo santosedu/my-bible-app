@@ -1,5 +1,5 @@
 import { useProgressStore } from '@/stores'
-import { testamentGroups } from '@/data/books'
+import { testamentGroups, getTotalChapters } from '@/data/books'
 import type { BookMeta } from '@/types'
 
 type ReadStatus = 'none' | 'partial' | 'full'
@@ -67,11 +67,10 @@ function BookProgressItem({ book }: BookProgressItemProps) {
 }
 
 export function ProgressPanel() {
-  const getProgress = useProgressStore((s) => s.getOverallProgress)
-  const progress = getProgress()
+  const readChapters = useProgressStore((s) => s.readChapters)
+  const totalRead = readChapters.size
+  const totalChapters = getTotalChapters()
 
-  const totalRead = progress.read
-  const totalChapters = progress.total
   const percentage = totalChapters > 0
     ? ((totalRead / totalChapters) * 100).toFixed(1)
     : '0.0'

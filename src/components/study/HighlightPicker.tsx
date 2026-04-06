@@ -6,12 +6,14 @@ interface HighlightPickerProps {
   onRemove: () => void
 }
 
-const colors: HighlightColor[] = ['yellow', 'green', 'rose']
+const colors: HighlightColor[] = ['yellow', 'green', 'blue', 'red', 'purple']
 
 const colorLabels: Record<HighlightColor, string> = {
   yellow: 'amarelo',
   green: 'verde',
-  rose: 'rosa',
+  blue: 'azul',
+  red: 'vermelho',
+  purple: 'roxo',
 }
 
 export function HighlightPicker({

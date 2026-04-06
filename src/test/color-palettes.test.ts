@@ -12,7 +12,9 @@ const COLOR_TOKENS = [
   '--color-accent-value',
   '--color-highlight-yellow-value',
   '--color-highlight-green-value',
-  '--color-highlight-rose-value',
+  '--color-highlight-blue-value',
+  '--color-highlight-red-value',
+  '--color-highlight-purple-value',
   '--color-border-value',
 ]
 

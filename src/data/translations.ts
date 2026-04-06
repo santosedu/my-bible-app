@@ -6,7 +6,7 @@ export const translations: TranslationMeta[] = [
   { id: 'nvi', name: 'Nova Versão Internacional', shortName: 'NVI', language: 'pt-BR' },
 ]
 
-export const defaultTranslationId: TranslationId = 'nvi'
+export const defaultTranslationId: TranslationId = 'ara'
 
 const translationMap = new Map<TranslationId, TranslationMeta>()
 for (const t of translations) {

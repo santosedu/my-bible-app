@@ -1,20 +1,24 @@
-import { useSyncExternalStore, useMemo } from 'react'
+import { useSyncExternalStore, useMemo, useCallback } from 'react'
 
 export function useIsMobile(breakpoint = 768): boolean {
   const query = `(max-width: ${breakpoint - 1}px)`
 
-  const subscribe = useMemo(
-    () => (callback: () => void) => {
-      const mq = window.matchMedia(query)
+  const { mq } = useMemo(() => {
+    const mq = window.matchMedia(query)
+    return { mq }
+  }, [query])
+
+  const subscribe = useCallback(
+    (callback: () => void) => {
       mq.addEventListener('change', callback)
       return () => mq.removeEventListener('change', callback)
     },
-    [query],
+    [mq],
   )
 
   return useSyncExternalStore(
     subscribe,
-    () => window.matchMedia(query).matches,
+    () => mq.matches,
     () => false,
   )
 }

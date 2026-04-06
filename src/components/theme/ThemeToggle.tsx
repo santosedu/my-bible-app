@@ -99,7 +99,7 @@ export function ThemeToggle() {
           onClick={() => setTheme(option.value)}
           className={`
             flex items-center justify-center w-9 h-9 rounded-md
-            transition-colors duration-0.2
+            transition-colors duration-200
             ${preference === option.value 
               ? 'bg-[var(--color-accent)] text-white' 
               : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-surface-raised)]'

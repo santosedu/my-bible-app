@@ -30,7 +30,7 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getByText('Algo deu errado')).toBeInTheDocument()
     expect(screen.getByText('Ocorreu um erro inesperado. Por favor, recarregue a página.')).toBeInTheDocument()
-    expect(screen.getByText('Test error')).toBeInTheDocument()
+    expect(screen.getByText(/Test error/)).toBeInTheDocument()
     
     consoleError.mockRestore()
   })
@@ -46,7 +46,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     )
 
-    const reloadButton = screen.getByRole('button', { name: /recarregar/i })
+    const reloadButton = screen.getByRole('button', { name: /Recarregar página/i })
     expect(reloadButton).toBeInTheDocument()
 
     fireEvent.click(reloadButton)

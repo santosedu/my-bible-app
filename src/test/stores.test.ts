@@ -93,8 +93,8 @@ describe('studyStore', () => {
       color: 'yellow',
     })
     const id = useStudyStore.getState().highlights[0].id
-    useStudyStore.getState().editHighlightColor(id, 'rose')
-    expect(useStudyStore.getState().highlights[0].color).toBe('rose')
+    useStudyStore.getState().editHighlightColor(id, 'blue')
+    expect(useStudyStore.getState().highlights[0].color).toBe('blue')
   })
 
   it('addNote creates note', () => {
@@ -302,7 +302,7 @@ describe('persist middleware', () => {
       chapter: 1,
       startVerse: 1,
       endVerse: 1,
-      color: 'rose',
+      color: 'blue',
     })
 
     const serialized = localStorage.getItem('bible-app-study')

@@ -257,16 +257,4 @@ describe('theme persistence', () => {
   })
 })
 
-describe('WCAG AA contrast verification', () => {
-  it('light theme has proper CSS variable definitions', () => {
-    expect(true).toBe(true)
-  })
 
-  it('dark theme has proper CSS variable definitions', () => {
-    expect(true).toBe(true)
-  })
-
-  it('sepia theme has proper CSS variable definitions', () => {
-    expect(true).toBe(true)
-  })
-})

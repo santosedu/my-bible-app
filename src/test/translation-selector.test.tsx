@@ -15,7 +15,7 @@ beforeEach(() => {
   useBibleStore.setState({
     bookId: null,
     chapter: null,
-    activeTranslation: 'nvi',
+    activeTranslation: 'ara',
     comparisonTranslations: [],
     comparisonMode: false,
   })
@@ -57,15 +57,15 @@ function renderChapterReaderWithHeader(initialEntry = '/genesis/1') {
 }
 
 describe('defaultTranslationId', () => {
-  it('should be nvi', () => {
-    expect(defaultTranslationId).toBe('nvi')
+  it('should be ara', () => {
+    expect(defaultTranslationId).toBe('ara')
   })
 
   it('should match the default in bibleStore', () => {
     useBibleStore.setState({
       bookId: null,
       chapter: null,
-      activeTranslation: 'nvi',
+      activeTranslation: 'ara',
       comparisonTranslations: [],
       comparisonMode: false,
     })
@@ -98,16 +98,16 @@ describe('getChapterSync with translation parameter', () => {
     expect(nviVerses[0].text).not.toBe(araVerses[0].text)
   })
 
-  it('defaults to NVI when no translationId is provided', () => {
+  it('defaults to ARA when no translationId is provided', () => {
     const versesWithDefault = getChapterSync('genesis', 1)
-    const versesWithNvi = getChapterSync('genesis', 1, 'nvi')
-    expect(versesWithDefault[0].text).toBe(versesWithNvi[0].text)
+    const versesWithAra = getChapterSync('genesis', 1, 'ara')
+    expect(versesWithDefault[0].text).toBe(versesWithAra[0].text)
   })
 })
 
 describe('bibleStore translation state', () => {
-  it('initializes with nvi as the default active translation', () => {
-    expect(useBibleStore.getState().activeTranslation).toBe('nvi')
+  it('initializes with ara as the default active translation', () => {
+    expect(useBibleStore.getState().activeTranslation).toBe('ara')
   })
 
   it('setActiveTranslation changes the active translation', () => {

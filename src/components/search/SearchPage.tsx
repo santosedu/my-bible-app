@@ -3,15 +3,17 @@ import { useSearchParams } from 'react-router'
 import { SearchInput } from './SearchInput'
 import { SearchResults } from './SearchResults'
 import { getSearchResults } from '@/data/bibleData'
+import { useBibleStore } from '@/stores'
 
 export function SearchPage() {
   const [searchParams] = useSearchParams()
   const initialQuery = searchParams.get('q') || ''
+  const activeTranslation = useBibleStore((s) => s.activeTranslation)
 
   const results = useMemo(() => {
     if (!initialQuery.trim()) return []
-    return getSearchResults(initialQuery)
-  }, [initialQuery])
+    return getSearchResults(initialQuery, activeTranslation)
+  }, [initialQuery, activeTranslation])
 
   return (
     <div className="space-y-4" data-testid="search-page">

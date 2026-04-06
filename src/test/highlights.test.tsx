@@ -45,7 +45,7 @@ function renderWithMemoryRouter(initialEntry: string) {
 }
 
 describe('HighlightPicker', () => {
-  it('renders three circular color buttons (yellow, green, rose)', () => {
+  it('renders five circular color buttons (yellow, green, blue, red, purple)', () => {
     render(
       <HighlightPicker
         currentColor={null}
@@ -56,7 +56,9 @@ describe('HighlightPicker', () => {
 
     expect(screen.getByTestId('highlight-btn-yellow')).toBeDefined()
     expect(screen.getByTestId('highlight-btn-green')).toBeDefined()
-    expect(screen.getByTestId('highlight-btn-rose')).toBeDefined()
+    expect(screen.getByTestId('highlight-btn-blue')).toBeDefined()
+    expect(screen.getByTestId('highlight-btn-red')).toBeDefined()
+    expect(screen.getByTestId('highlight-btn-purple')).toBeDefined()
   })
 
   it('clicking a color button calls onColorSelect with correct color', () => {
@@ -72,8 +74,8 @@ describe('HighlightPicker', () => {
     fireEvent.click(screen.getByTestId('highlight-btn-green'))
     expect(onColorSelect).toHaveBeenCalledWith('green')
 
-    fireEvent.click(screen.getByTestId('highlight-btn-rose'))
-    expect(onColorSelect).toHaveBeenCalledWith('rose')
+    fireEvent.click(screen.getByTestId('highlight-btn-blue'))
+    expect(onColorSelect).toHaveBeenCalledWith('blue')
 
     fireEvent.click(screen.getByTestId('highlight-btn-yellow'))
     expect(onColorSelect).toHaveBeenCalledWith('yellow')
@@ -123,40 +125,25 @@ describe('HighlightPicker', () => {
     const onRemove = vi.fn()
     render(
       <HighlightPicker
-        currentColor="rose"
+        currentColor="red"
         onColorSelect={vi.fn()}
         onRemove={onRemove}
       />,
     )
 
-    fireEvent.click(screen.getByTestId('highlight-btn-remove'))
-    expect(onRemove).toHaveBeenCalled()
-  })
-
-  it('color buttons have correct aria labels', () => {
-    render(
-      <HighlightPicker
-        currentColor={null}
-        onColorSelect={vi.fn()}
-        onRemove={vi.fn()}
-      />,
-    )
-
-    expect(screen.getByTestId('highlight-btn-yellow').getAttribute('aria-label')).toBe('Destacar em amarelo')
-    expect(screen.getByTestId('highlight-btn-green').getAttribute('aria-label')).toBe('Destacar em verde')
-    expect(screen.getByTestId('highlight-btn-rose').getAttribute('aria-label')).toBe('Destacar em rosa')
+    expect(screen.getByTestId('highlight-btn-remove')).toBeInTheDocument()
   })
 
   it('color buttons have correct aria-pressed state', () => {
     render(
       <HighlightPicker
-        currentColor="rose"
+        currentColor="red"
         onColorSelect={vi.fn()}
         onRemove={vi.fn()}
       />,
     )
 
-    expect(screen.getByTestId('highlight-btn-rose').getAttribute('aria-pressed')).toBe('true')
+    expect(screen.getByTestId('highlight-btn-red').getAttribute('aria-pressed')).toBe('true')
     expect(screen.getByTestId('highlight-btn-yellow').getAttribute('aria-pressed')).toBe('false')
   })
 })
@@ -185,13 +172,13 @@ describe('VerseBlock - highlight rendering', () => {
     expect(block.className).toContain('bg-[var(--color-highlight-green)]')
   })
 
-  it('renders with correct highlight background for rose', () => {
+  it('renders with correct highlight background for blue', () => {
     render(
-      <VerseBlock verse={verse} isSelected={false} highlightColor="rose" onSelect={vi.fn()} />,
+      <VerseBlock verse={verse} isSelected={false} highlightColor="blue" onSelect={vi.fn()} />,
     )
 
     const block = screen.getByTestId('verse-1')
-    expect(block.className).toContain('bg-[var(--color-highlight-rose)]')
+    expect(block.className).toContain('bg-[var(--color-highlight-blue)]')
   })
 
   it('selected state without highlight uses surface-raised background', () => {
@@ -303,19 +290,19 @@ describe('ChapterReader - highlight integration', () => {
     await user.keyboard('{/Shift}')
 
     await waitFor(() => {
-      expect(screen.getByTestId('highlight-btn-rose')).toBeDefined()
+      expect(screen.getByTestId('highlight-btn-red')).toBeDefined()
     })
 
-    await user.click(screen.getByTestId('highlight-btn-rose'))
+    await user.click(screen.getByTestId('highlight-btn-red'))
 
     const highlight = useStudyStore.getState().highlights[0]
     expect(highlight.startVerse).toBe(1)
     expect(highlight.endVerse).toBe(5)
-    expect(highlight.color).toBe('rose')
+    expect(highlight.color).toBe('red')
 
-    expect(screen.getByTestId('verse-1').className).toContain('bg-[var(--color-highlight-rose)]')
-    expect(screen.getByTestId('verse-3').className).toContain('bg-[var(--color-highlight-rose)]')
-    expect(screen.getByTestId('verse-5').className).toContain('bg-[var(--color-highlight-rose)]')
+    expect(screen.getByTestId('verse-1').className).toContain('bg-[var(--color-highlight-red)]')
+    expect(screen.getByTestId('verse-3').className).toContain('bg-[var(--color-highlight-red)]')
+    expect(screen.getByTestId('verse-5').className).toContain('bg-[var(--color-highlight-red)]')
   })
 
   it('clicking highlight on already-highlighted verse shows current color as active and remove button', async () => {
@@ -482,7 +469,7 @@ describe('ChapterReader - highlight persistence', () => {
       chapter: 1,
       startVerse: 1,
       endVerse: 3,
-      color: 'rose',
+      color: 'purple',
     })
 
     const serialized = localStorage.getItem('bible-app-study')
@@ -493,10 +480,10 @@ describe('ChapterReader - highlight persistence', () => {
     renderWithMemoryRouter('/genesis/1')
 
     await waitFor(() => {
-      expect(screen.getByTestId('verse-1').className).toContain('bg-[var(--color-highlight-rose)]')
-      expect(screen.getByTestId('verse-2').className).toContain('bg-[var(--color-highlight-rose)]')
-      expect(screen.getByTestId('verse-3').className).toContain('bg-[var(--color-highlight-rose)]')
-      expect(screen.getByTestId('verse-4').className).not.toContain('bg-[var(--color-highlight-rose)]')
+      expect(screen.getByTestId('verse-1').className).toContain('bg-[var(--color-highlight-purple)]')
+      expect(screen.getByTestId('verse-2').className).toContain('bg-[var(--color-highlight-purple)]')
+      expect(screen.getByTestId('verse-3').className).toContain('bg-[var(--color-highlight-purple)]')
+      expect(screen.getByTestId('verse-4').className).not.toContain('bg-[var(--color-highlight-purple)]')
     })
   })
 

@@ -26,7 +26,7 @@ export function getVerseSync(
   verse: number,
   translationId?: TranslationId,
 ): string | null {
-  const bibleData = eagerlyLoadedData[translationId ?? 'nvi']
+  const bibleData = eagerlyLoadedData[translationId ?? 'ara']
   const bookData = bibleData[bookId as BookId]
   if (!bookData) return null
   const chapterData = bookData[chapter]
@@ -38,7 +38,7 @@ export async function getVerse(
   bookId: string,
   chapter: number,
   verse: number,
-  translationId: TranslationId = 'nvi',
+  translationId: TranslationId = 'ara',
 ): Promise<string | null> {
   return getVerseSync(bookId, chapter, verse, translationId)
 }
@@ -48,7 +48,7 @@ export function getChapterSync(
   chapter: number,
   translationId?: TranslationId,
 ): Verse[] {
-  const bibleData = eagerlyLoadedData[translationId ?? 'nvi']
+  const bibleData = eagerlyLoadedData[translationId ?? 'ara']
   const bookData = bibleData[bookId as BookId]
   if (!bookData) return []
   const chapterData = bookData[chapter]
@@ -62,7 +62,7 @@ export function getChapterSync(
 export async function getChapter(
   bookId: string,
   chapter: number,
-  translationId: TranslationId = 'nvi',
+  translationId: TranslationId = 'ara',
 ): Promise<Verse[]> {
   return getChapterSync(bookId, chapter, translationId)
 }
@@ -102,13 +102,16 @@ function normalize(text: string): string {
 
 const MAX_RESULTS = 50
 
-function buildInvertedIndex(): Map<string, Array<{ bookId: string; bookName: string; chapter: number; verse: number; text: string }>> {
-  const index = new Map<string, Array<{ bookId: string; bookName: string; chapter: number; verse: number; text: string }>>()
+type IndexEntry = { bookId: string; bookName: string; chapter: number; verse: number; text: string }
 
-  for (const bookId of Object.keys(araData)) {
+function buildInvertedIndex(translationId: TranslationId): Map<string, IndexEntry[]> {
+  const index = new Map<string, IndexEntry[]>()
+  const bibleData = eagerlyLoadedData[translationId]
+
+  for (const bookId of Object.keys(bibleData)) {
     const meta = getBookMeta(bookId)
     const bookName = meta?.name ?? bookId
-    const bookData = araData[bookId as BookId]
+    const bookData = bibleData[bookId as BookId]
     for (const chapterStr of Object.keys(bookData)) {
       const chapter = Number(chapterStr)
       const chapterData = bookData[chapter]
@@ -132,16 +135,18 @@ function buildInvertedIndex(): Map<string, Array<{ bookId: string; bookName: str
   return index
 }
 
-let invertedIndex: Map<string, Array<{ bookId: string; bookName: string; chapter: number; verse: number; text: string }>> | null = null
+const invertedIndexCache = new Map<TranslationId, Map<string, IndexEntry[]>>()
 
-function getInvertedIndex() {
-  if (!invertedIndex) {
-    invertedIndex = buildInvertedIndex()
+function getInvertedIndex(translationId: TranslationId): Map<string, IndexEntry[]> {
+  let index = invertedIndexCache.get(translationId)
+  if (!index) {
+    index = buildInvertedIndex(translationId)
+    invertedIndexCache.set(translationId, index)
   }
-  return invertedIndex
+  return index
 }
 
-export function getSearchResults(query: string): SearchResult[] {
+export function getSearchResults(query: string, translationId: TranslationId = 'ara'): SearchResult[] {
   const trimmed = query.trim()
   if (!trimmed) return []
 
@@ -150,7 +155,7 @@ export function getSearchResults(query: string): SearchResult[] {
 
   if (queryWords.length === 0) return []
 
-  const index = getInvertedIndex()
+  const index = getInvertedIndex(translationId)
 
   const isPhraseSearch = queryWords.length > 1
   let results: SearchResult[] = []

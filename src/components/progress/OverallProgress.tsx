@@ -1,18 +1,20 @@
 import { useProgressStore } from '@/stores'
+import { getTotalChapters } from '@/data/books'
 
 export function OverallProgress() {
-  const getProgress = useProgressStore((s) => s.getOverallProgress)
-  const progress = getProgress()
+  const readChapters = useProgressStore((s) => s.readChapters)
+  const total = getTotalChapters()
+  const read = readChapters.size
 
-  const percentage = progress.total > 0
-    ? ((progress.read / progress.total) * 100).toFixed(1)
+  const percentage = total > 0
+    ? ((read / total) * 100).toFixed(1)
     : '0.0'
 
   return (
     <div
       data-testid="overall-progress"
-      data-read={progress.read}
-      data-total={progress.total}
+      data-read={read}
+      data-total={total}
       className="flex flex-col items-center gap-2 rounded-lg bg-[var(--color-surface)] p-4"
     >
       <div className="text-center">
@@ -23,7 +25,7 @@ export function OverallProgress() {
           Progresso da Bíblia
         </h3>
         <p className="font-footnote text-[var(--color-text-muted)]">
-          {progress.read} de {progress.total} capítulos
+          {read} de {total} capítulos
         </p>
       </div>
       <div

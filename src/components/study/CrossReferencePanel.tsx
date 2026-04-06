@@ -97,7 +97,7 @@ export function CrossReferencePanel({ references, isOpen, onClose }: CrossRefere
             Nenhuma referência cruzada encontrada.
           </p>
           <p className="font-footnote mt-1 text-[var(--color-text-muted)]">
-            Este versículo não possui referências linkedas.
+            Este versículo não possui referências cruzadas.
           </p>
         </div>
       ) : (

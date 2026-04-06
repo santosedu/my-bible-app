@@ -1,4 +1,4 @@
-import { getBookMeta } from '@/data/books'
+import { getBookMeta, getTotalChapters } from '@/data/books'
 import { useProgressStore } from '@/stores'
 import type { BookMeta } from '@/types'
 
@@ -19,8 +19,14 @@ interface ProgressIndicatorProps {
 
 export function ProgressIndicator({ bookId, showLabel = true }: ProgressIndicatorProps) {
   const bookMeta = getBookMeta(bookId)
-  const getProgress = useProgressStore((s) => s.getBookProgress)
-  const progress = getProgress(bookId)
+  const readChapters = useProgressStore((s) => s.readChapters)
+  const total = getTotalChapters(bookId)
+  let read = 0
+  const prefix = `${bookId}:`
+  for (const key of readChapters) {
+    if (key.startsWith(prefix)) read++
+  }
+  const progress = { read, total }
   const status = getReadStatus(progress.read, progress.total)
 
   const statusClasses: Record<ReadStatus, string> = {

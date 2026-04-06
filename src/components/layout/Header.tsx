@@ -3,6 +3,7 @@ import { useSidebar } from './SidebarContext'
 import { useNavigate } from 'react-router'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { translations } from '@/data/translations'
+import { getBook } from '@/data/bibleData'
 import type { TranslationId } from '@/types'
 import { useCallback, useRef } from 'react'
 
@@ -78,8 +79,8 @@ export function Header() {
           </button>
           <div className="font-ui text-sm font-semibold text-[var(--color-text)]">
             {bookId ? (
-              <span data-testid="header-location">
-                <span className="capitalize">{bookId.replace(/-/g, ' ')}</span>
+                <span data-testid="header-location">
+                <span>{getBook(bookId)?.name ?? bookId}</span>
                 {chapter && (
                   <span className="text-[var(--color-text-muted)] ml-1">
                     {chapter}

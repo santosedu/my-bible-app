@@ -1,10 +1,15 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import App from '@/App'
+import { BrowserRouter } from 'react-router'
+import { AppShell } from '@/components/layout/AppShell'
 
 describe('App', () => {
-  it('renders the app title', () => {
-    render(<App />)
-    expect(screen.getByText('My Bible App')).toBeInTheDocument()
+  it('renders app shell with main content area', () => {
+    render(
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>,
+    )
+    expect(screen.getByTestId('main-content')).toBeInTheDocument()
   })
 })

@@ -37,7 +37,7 @@ beforeEach(() => {
   useBibleStore.setState({
     bookId: null,
     chapter: null,
-    activeTranslation: 'nvi',
+    activeTranslation: 'ara',
     comparisonTranslations: [],
     comparisonMode: false,
   })
@@ -89,12 +89,12 @@ describe('Header', () => {
 
 describe('BottomBar', () => {
   it('renders on mobile viewport', () => {
-    renderWithRouter(<BottomBar />)
+    renderWithSidebar(<BottomBar />)
     expect(screen.getByTestId('bottom-bar')).toBeDefined()
   })
 
   it('has navigation buttons', () => {
-    renderWithRouter(<BottomBar />)
+    renderWithSidebar(<BottomBar />)
     expect(screen.getByLabelText('Livros')).toBeDefined()
     expect(screen.getByLabelText('Buscar')).toBeDefined()
     expect(screen.getByLabelText('Progresso')).toBeDefined()

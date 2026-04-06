@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 interface SearchInputProps {
@@ -9,23 +9,30 @@ interface SearchInputProps {
 export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   const urlQuery = searchParams.get('q') || ''
-  const query = urlQuery || initialQuery
+  const [localValue, setLocalValue] = useState(urlQuery || initialQuery)
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-
-    if (value.trim()) {
-      navigate(`/search?q=${encodeURIComponent(value.trim())}`, { replace: true })
-      onSearch(value.trim())
-    } else {
-      navigate('/search', { replace: true })
-      onSearch('')
-    }
+    setLocalValue(value)
+    const trimmed = value.trim()
+    clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => {
+      if (trimmed) {
+        navigate(`/search?q=${encodeURIComponent(trimmed)}`, { replace: true })
+        onSearch(trimmed)
+      } else {
+        navigate('/search', { replace: true })
+        onSearch('')
+      }
+    }, 250)
   }, [navigate, onSearch])
 
   const handleClear = useCallback(() => {
+    clearTimeout(timerRef.current)
+    setLocalValue('')
     navigate('/search', { replace: true })
     onSearch('')
   }, [navigate, onSearch])
@@ -49,13 +56,13 @@ export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
       </div>
       <input
         type="text"
-        defaultValue={query}
+        value={localValue}
         onChange={handleChange}
         placeholder="Buscar na Bíblia..."
         className="w-full h-12 pl-12 pr-12 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg font-ui text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)]"
         aria-label="Buscar na Bíblia"
       />
-      {query && (
+      {localValue && (
         <button
           onClick={handleClear}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)]"

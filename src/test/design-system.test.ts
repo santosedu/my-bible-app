@@ -12,7 +12,9 @@ const CSS_TOKENS: Record<string, string> = {
   accent: '--color-accent-value',
   'highlight-yellow': '--color-highlight-yellow-value',
   'highlight-green': '--color-highlight-green-value',
-  'highlight-rose': '--color-highlight-rose-value',
+  'highlight-blue': '--color-highlight-blue-value',
+  'highlight-red': '--color-highlight-red-value',
+  'highlight-purple': '--color-highlight-purple-value',
   border: '--color-border-value',
 }
 
@@ -27,7 +29,9 @@ const LIGHT_THEME: Record<string, string> = {
   accent: '#C49A6C',
   'highlight-yellow': '#F5E6B8',
   'highlight-green': '#D4E8D0',
-  'highlight-rose': '#F0D4D4',
+  'highlight-blue': '#C8D8F0',
+  'highlight-red': '#F0D4D4',
+  'highlight-purple': '#E0D0F0',
   border: '#DDD5C9',
 }
 
@@ -42,7 +46,9 @@ const DARK_THEME: Record<string, string> = {
   accent: '#D4A96A',
   'highlight-yellow': '#3D3520',
   'highlight-green': '#1F3320',
-  'highlight-rose': '#3A2020',
+  'highlight-blue': '#1C2A3D',
+  'highlight-red': '#3A2020',
+  'highlight-purple': '#2A1E3A',
   border: '#3A3633',
 }
 
@@ -57,7 +63,9 @@ const SEPIA_THEME: Record<string, string> = {
   accent: '#B8864E',
   'highlight-yellow': '#E8D4A0',
   'highlight-green': '#C8DBBD',
-  'highlight-rose': '#E8C8C8',
+  'highlight-blue': '#B8CCE8',
+  'highlight-red': '#E8C8C8',
+  'highlight-purple': '#D8C0E8',
   border: '#D4C8AE',
 }
 
@@ -72,7 +80,9 @@ const GREEN_THEME: Record<string, string> = {
   accent: '#2D6A4F',
   'highlight-yellow': '#F5E6B8',
   'highlight-green': '#D8F3DC',
-  'highlight-rose': '#F0D4D4',
+  'highlight-blue': '#C0D8F0',
+  'highlight-red': '#F0D4D4',
+  'highlight-purple': '#E0D0F0',
   border: '#D4DDD4',
 }
 
@@ -87,7 +97,9 @@ const BLUE_THEME: Record<string, string> = {
   accent: '#0077B6',
   'highlight-yellow': '#F5E6B8',
   'highlight-green': '#D4E8D0',
-  'highlight-rose': '#F0D4D4',
+  'highlight-blue': '#C8D8F0',
+  'highlight-red': '#F0D4D4',
+  'highlight-purple': '#E0D0F0',
   border: '#CED8DF',
 }
 
@@ -102,7 +114,9 @@ const ORANGE_THEME: Record<string, string> = {
   accent: '#CC6A00',
   'highlight-yellow': '#FFE8B8',
   'highlight-green': '#E8F0D8',
-  'highlight-rose': '#FCE8E8',
+  'highlight-blue': '#D0E0F8',
+  'highlight-red': '#FCE8E8',
+  'highlight-purple': '#F0E0FC',
   border: '#EDE3D6',
 }
 

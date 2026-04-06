@@ -10,12 +10,10 @@ function Sidebar() {
   return (
     <>
       {isOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/30 lg:hidden"
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-black/30 lg:hidden cursor-pointer border-0 p-0"
           onClick={close}
-          onKeyDown={(e) => e.key === 'Escape' && close()}
-          role="button"
-          tabIndex={-1}
           aria-label="Fechar menu"
         />
       )}

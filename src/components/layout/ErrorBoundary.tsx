@@ -27,6 +27,15 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     window.location.reload()
   }
 
+  handleClearAndReload = () => {
+    try {
+      localStorage.clear()
+    } catch {
+      // ignore storage errors
+    }
+    window.location.reload()
+  }
+
   render() {
     if (this.state.hasError) {
       return (
@@ -43,16 +52,25 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             </p>
             {this.state.error && (
               <p className="font-footnote text-[var(--color-text-muted)] mb-6">
-                {this.state.error.message}
+                Erro: {this.state.error.message}
               </p>
             )}
-            <button
-              onClick={this.handleReload}
-              className="btn-primary"
-              type="button"
-            >
-              Recarregar página
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={this.handleReload}
+                className="btn-primary"
+                type="button"
+              >
+                Recarregar página
+              </button>
+              <button
+                onClick={this.handleClearAndReload}
+                className="btn-ghost"
+                type="button"
+              >
+                Limpar dados e recarregar
+              </button>
+            </div>
           </div>
         </div>
       )

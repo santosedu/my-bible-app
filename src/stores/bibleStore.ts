@@ -26,7 +26,7 @@ export const useBibleStore = create<BibleStore>()(
     (set) => ({
       bookId: null,
       chapter: null,
-      activeTranslation: 'nvi' as TranslationId,
+      activeTranslation: 'ara' as TranslationId,
       comparisonTranslations: [] as TranslationId[],
       comparisonMode: false,
 

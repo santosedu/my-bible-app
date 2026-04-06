@@ -1,12 +1,27 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router'
 import userEvent from '@testing-library/user-event'
 import { useBibleStore } from '@/stores'
 import { SearchInput } from '@/components/search/SearchInput'
 import { SearchResults } from '@/components/search/SearchResults'
 import { SearchPage } from '@/components/search/SearchPage'
+import { getSearchResults } from '@/data/bibleData'
 import type { SearchResult } from '@/types'
+
+getSearchResults('a', 'ara')
+
+beforeEach(() => {
+  vi.useRealTimers()
+  localStorage.clear()
+  useBibleStore.setState({
+    bookId: null,
+    chapter: null,
+    activeTranslation: 'ara',
+    comparisonTranslations: [],
+    comparisonMode: false,
+  })
+})
 
 beforeEach(() => {
   window.history.pushState({}, 'Test', '/')
@@ -33,8 +48,8 @@ describe('SearchInput', () => {
     expect(input).toBeDefined()
   })
 
-  it('calls onSearch when input changes', async () => {
-    const user = userEvent.setup()
+  it('calls onSearch after debounce', async () => {
+    vi.useFakeTimers()
     const onSearch = vi.fn()
 
     render(
@@ -44,10 +59,13 @@ describe('SearchInput', () => {
     )
 
     const input = screen.getByPlaceholderText('Buscar na Bíblia...')
-    await user.type(input, 'amor{enter}')
+    fireEvent.change(input, { target: { value: 'amor' } })
 
+    vi.advanceTimersByTime(300)
     expect(onSearch).toHaveBeenCalledWith('amor')
-  })
+
+    vi.useRealTimers()
+  }, 10000)
 
   it('shows clear button when query is provided in URL', () => {
     const onSearch = vi.fn()

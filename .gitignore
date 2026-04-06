@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Compozy / Agents
+.agents
+.compozy
+
+# Temp
+.tmp

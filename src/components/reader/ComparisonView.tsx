@@ -2,29 +2,11 @@ import { useMemo, useEffect, useRef, useCallback, useState } from 'react'
 import { getChapter } from '@/data/bibleData'
 import { useBibleStore, useStudyStore } from '@/stores'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import { getHighlightForVerse } from '@/utils/highlights'
 import { TranslationSelector } from './TranslationSelector'
 import { VerseBlock } from './VerseBlock'
-import type { Verse, TranslationId, Highlight, HighlightColor } from '@/types'
+import type { Verse, TranslationId } from '@/types'
 import { translations } from '@/data/translations'
-
-function getHighlightForVerse(
-  highlights: Highlight[],
-  bookId: string,
-  chapter: number,
-  verseNumber: number,
-): HighlightColor | null {
-  for (const h of highlights) {
-    if (
-      h.bookId === bookId &&
-      h.chapter === chapter &&
-      verseNumber >= h.startVerse &&
-      verseNumber <= h.endVerse
-    ) {
-      return h.color
-    }
-  }
-  return null
-}
 
 interface ComparisonViewProps {
   bookId: string
@@ -68,10 +50,19 @@ export function ComparisonView({ bookId, chapterNum }: ComparisonViewProps) {
   const [verseData, setVerseData] = useState<Record<string, Verse[]>>({})
 
   useEffect(() => {
-    translationIds.forEach(async (id) => {
-      const verses = await getChapter(bookId, chapterNum, id)
-      setVerseData((prev) => ({ ...prev, [id]: verses }))
+    let cancelled = false
+    Promise.all(
+      translationIds.map(async (id) => {
+        const verses = await getChapter(bookId, chapterNum, id)
+        return { id, verses }
+      }),
+    ).then((results) => {
+      if (cancelled) return
+      setVerseData(Object.fromEntries(results.map((r) => [r.id, r.verses])))
     })
+    return () => {
+      cancelled = true
+    }
   }, [bookId, chapterNum, translationIds])
 
   const columns = useMemo((): ColumnData[] =>
