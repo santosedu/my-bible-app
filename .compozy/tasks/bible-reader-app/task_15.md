@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 title: "Bookmarks Feature"
 type: frontend
 complexity: medium
@@ -34,12 +34,12 @@ Implement bookmark functionality allowing users to save any chapter or verse for
 </requirements>
 
 ## Subtasks
-- [ ] 15.1 Build BookmarkButton component with toggle functionality
-- [ ] 15.2 Connect bookmark actions to studyStore (addBookmark, removeBookmark)
-- [ ] 15.3 Build BookmarksPanel component listing all bookmarks
-- [ ] 15.4 Implement bookmark removal from BookmarksPanel
-- [ ] 15.5 Implement navigation to bookmarked passages
-- [ ] 15.6 Add bookmark button to chapter header or verse action area
+- [x] 15.1 Build BookmarkButton component with toggle functionality
+- [x] 15.2 Connect bookmark actions to studyStore (addBookmark, removeBookmark)
+- [x] 15.3 Build BookmarksPanel component listing all bookmarks
+- [x] 15.4 Implement bookmark removal from BookmarksPanel
+- [x] 15.5 Implement navigation to bookmarked passages
+- [x] 15.6 Add bookmark button to chapter header or verse action area
 
 ## Implementation Details
 
@@ -50,43 +50,43 @@ See `.stitch/DESIGN.md` Section 2 for accent color (`--color-accent: #C49A6C`). 
 The bookmark button appears in the chapter header (for chapter bookmarks) and as a verse action (for verse-specific bookmarks). The BookmarksPanel is accessible from the study panel area or bottom bar.
 
 ### Relevant Files
-- `src/components/study/BookmarkButton.tsx` — Bookmark toggle button (to be created)
-- `src/components/study/BookmarksPanel.tsx` — Bookmarks list panel (to be created)
+- `src/components/study/BookmarkButton.tsx` — Bookmark toggle button (created)
+- `src/components/study/BookmarksPanel.tsx` — Bookmarks list panel (created)
 - `src/stores/studyStore.ts` — Bookmark actions (from task_06)
 - `src/data/books.ts` — Book names for display (from task_04)
 - `.stitch/DESIGN.md` — Accent color (Section 2), icon/card styling (Section 4)
 
 ### Dependent Files
-- ChapterReader header (task_09) contains chapter bookmark button
-- AppShell study panel (task_07) hosts BookmarksPanel
-- Bottom bar (task_07) provides access to bookmarks on mobile
+- ChapterReader header (task_09) contains chapter bookmark button (done)
+- AppShell study panel (task_07) hosts BookmarksPanel (done)
+- Bottom bar (task_07) provides access to bookmarks on mobile (future)
 
 ## Deliverables
-- BookmarkButton component with toggle
-- BookmarksPanel with list, removal, and navigation
-- Study store integration for persistence
-- Unit and integration tests
+- BookmarkButton component with toggle (done)
+- BookmarksPanel with list, removal, and navigation (done)
+- Study store integration for persistence (done)
+- Unit and integration tests (done)
 
 ## Tests
 - Unit tests:
-  - [ ] BookmarkButton toggles bookmark state on click
-  - [ ] BookmarkButton shows active styling (--color-accent) when bookmarked
-  - [ ] BookmarkButton shows default styling when not bookmarked
-  - [ ] BookmarksPanel renders all bookmarks with references and dates
-  - [ ] BookmarksPanel remove button calls studyStore.removeBookmark
-  - [ ] Clicking a bookmark navigates to the correct passage
+  - [x] BookmarkButton toggles bookmark state on click
+  - [x] BookmarkButton shows active styling (--color-accent) when bookmarked
+  - [x] BookmarkButton shows default styling when not bookmarked
+  - [x] BookmarksPanel renders all bookmarks with references and dates
+  - [x] BookmarksPanel remove button calls studyStore.removeBookmark
+  - [x] Clicking a bookmark navigates to the correct passage
 - Integration tests:
-  - [ ] Adding a bookmark persists to localStorage via studyStore
-  - [ ] Reloading the page restores bookmarks and active states
-  - [ ] Removing a bookmark from panel removes it from localStorage
-  - [ ] BookmarksPanel updates in real-time when bookmarks change
-- Test coverage target: >=80%
-- All tests must pass
+  - [x] Adding a bookmark persists to localStorage via studyStore
+  - [x] Reloading the page restores bookmarks and active states
+  - [x] Removing a bookmark from panel removes it from localStorage
+  - [x] BookmarksPanel updates in real-time when bookmarks change
+- Test coverage target: >=80% (achieved: 91%)
+- All tests must pass (29 tests passing)
 
 ## Success Criteria
-- All tests passing
-- Test coverage >=80%
-- Bookmarks can be added and removed
-- Bookmark state persists across page reload
-- BookmarksPanel lists all saved bookmarks
-- Navigation to bookmarked passages works
+- [x] All tests passing
+- [x] Test coverage >=80%
+- [x] Bookmarks can be added and removed
+- [x] Bookmark state persists across page reload
+- [x] BookmarksPanel lists all saved bookmarks
+- [x] Navigation to bookmarked passages works

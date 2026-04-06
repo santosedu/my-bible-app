@@ -8,6 +8,7 @@ import { ComparisonView } from './ComparisonView'
 import { HighlightPicker } from '@/components/study/HighlightPicker'
 import { NoteEditor } from '@/components/study/NoteEditor'
 import { CrossReferencePanel } from '@/components/study/CrossReferencePanel'
+import { BookmarkButton } from '@/components/study/BookmarkButton'
 import type { Verse, TranslationId, Highlight, HighlightColor, Note, BibleRef } from '@/types'
 
 function getHighlightForVerse(
@@ -394,32 +395,35 @@ function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
         <h1 className="font-book-title" data-testid="chapter-heading">
           {bookName} {chapterNum}
         </h1>
-        <button
-          data-testid="comparison-toggle"
-          onClick={handleToggleComparison}
-          className={`chip ${comparisonMode ? 'active' : ''}`}
-          aria-label={
-            comparisonMode
-              ? 'Desativar modo comparação'
-              : 'Ativar modo comparação'
-          }
-          aria-pressed={comparisonMode}
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            className="mr-1"
+        <div className="flex items-center gap-2">
+          <BookmarkButton bookId={bookId} chapter={chapterNum} />
+          <button
+            data-testid="comparison-toggle"
+            onClick={handleToggleComparison}
+            className={`chip ${comparisonMode ? 'active' : ''}`}
+            aria-label={
+              comparisonMode
+                ? 'Desativar modo comparação'
+                : 'Ativar modo comparação'
+            }
+            aria-pressed={comparisonMode}
           >
-            <rect x="1" y="2" width="5" height="12" rx="1" />
-            <rect x="10" y="2" width="5" height="12" rx="1" />
-          </svg>
-          Comparar
-        </button>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              className="mr-1"
+            >
+              <rect x="1" y="2" width="5" height="12" rx="1" />
+              <rect x="10" y="2" width="5" height="12" rx="1" />
+            </svg>
+            Comparar
+          </button>
+        </div>
       </div>
 
       {comparisonMode ? (
