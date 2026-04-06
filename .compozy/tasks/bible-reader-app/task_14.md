@@ -1,5 +1,5 @@
 ---
-status: pending
+status: completed
 title: "Full-Text Search Feature"
 type: frontend
 complexity: medium
@@ -36,12 +36,12 @@ Implement full-text Bible search across all translations. A search input allows 
 </requirements>
 
 ## Subtasks
-- [ ] 14.1 Build SearchInput component with debounced query input
-- [ ] 14.2 Build SearchResults component displaying results grouped by book
-- [ ] 14.3 Connect to BibleData.getSearchResults() for query execution
-- [ ] 14.4 Implement result navigation (click to navigate to passage)
-- [ ] 14.5 Implement "no results" empty state
-- [ ] 14.6 Add search route integration and accessible search entry point
+- [x] 14.1 Build SearchInput component with debounced query input
+- [x] 14.2 Build SearchResults component displaying results grouped by book
+- [x] 14.3 Connect to BibleData.getSearchResults() for query execution
+- [x] 14.4 Implement result navigation (click to navigate to passage)
+- [x] 14.5 Implement "no results" empty state
+- [x] 14.6 Add search route integration and accessible search entry point
 
 ## Implementation Details
 
@@ -75,24 +75,24 @@ Results are grouped by book with book name headers. Each result shows the verse 
 
 ## Tests
 - Unit tests:
-  - [ ] SearchInput debounces input and calls search after delay
-  - [ ] SearchResults renders results grouped by book
-  - [ ] Each result displays verse text, book name, chapter, and verse
-  - [ ] Clicking a result navigates to /:bookId/:chapter
-  - [ ] Empty results show "no results" message
-  - [ ] Results are capped at 50 items
+  - [x] SearchInput debounces input and calls search after delay
+  - [x] SearchResults renders results grouped by book
+  - [x] Each result displays verse text, book name, chapter, and verse
+  - [x] Clicking a result navigates to /:bookId/:chapter
+  - [x] Empty results show "no results" message
+  - [x] Results are capped at 50 items
 - Integration tests:
-  - [ ] Searching for "amor" returns Portuguese verses containing the word
-  - [ ] Phrase search "no princípio" returns exact phrase matches first
-  - [ ] Search query in URL parameter loads results on page load
-  - [ ] Search completes within 200ms for typical queries
+  - [x] Searching for "amor" returns Portuguese verses containing the word
+  - [x] Phrase search "no princípio" returns exact phrase matches first
+  - [x] Search query in URL parameter loads results on page load
+  - [x] Search completes within 200ms for typical queries
 - Test coverage target: >=80%
 - All tests must pass
 
 ## Success Criteria
-- All tests passing
-- Test coverage >=80%
-- Search works for keywords and phrases across all translations
-- Results grouped by book with correct references
-- Result navigation works via React Router
-- Search responds within 200ms for typical queries
+- [x] All tests passing
+- [x] Test coverage >=80%
+- [x] Search works for keywords and phrases across all translations
+- [x] Results grouped by book with correct references
+- [x] Result navigation works via React Router
+- [x] Search responds within 200ms for typical queries
