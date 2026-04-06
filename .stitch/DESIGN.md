@@ -36,6 +36,54 @@ Serenidade editorial refinada — inspirada em livros de leitura de alta qualida
 | `--color-text` | `#3E2F1C` | Texto marrom profundo |
 | `--color-accent` | `#B8864E` | Terracota suave |
 
+### Modo Verde (Green)
+| Token | Hex | Role |
+|:---|:---|:---|
+| `--color-bg` | `#F8F9FA` | Fundo principal de leitura (esverdeado suave) |
+| `--color-surface` | `#E4EBE6` | Superfície de cards e contêineres |
+| `--color-surface-raised` | `#D8F3DC` | Elementos elevados / hover |
+| `--color-text` | `#081C15` | Texto principal (verde escuro) |
+| `--color-text-secondary` | `#3D5A4A` | Texto secundário / subtitulos |
+| `--color-text-muted` | `#6B8B7A` | Hints, placeholders, disabled |
+| `--color-verse-number` | `#9AB0A2` | Número do versículo (discreto) |
+| `--color-accent` | `#2D6A4F` | Verde escuro — CTAs, favoritos, destaques |
+| `--color-highlight-yellow` | `#F5E6B8` | Highlight amarelo pastel |
+| `--color-highlight-green` | `#D8F3DC` | Highlight verde pastel |
+| `--color-highlight-rose` | `#F0D4D4` | Highlight rosa pastel |
+| `--color-border` | `#D4DDD4` | Bordas e divisores |
+
+### Modo Azul (Blue)
+| Token | Hex | Role |
+|:---|:---|:---|
+| `--color-bg` | `#FAF9F6` | Fundo principal de leitura (azul muito suave) |
+| `--color-surface` | `#DCE8EE` | Superfície de cards e contêineres |
+| `--color-surface-raised` | `#ADE8F4` | Elementos elevados / hover |
+| `--color-text` | `#03045E` | Texto principal (azul profundo) |
+| `--color-text-secondary` | `#2A4570` | Texto secundário / subtitulos |
+| `--color-text-muted` | `#5A7085` | Hints, placeholders, disabled |
+| `--color-verse-number` | `#8A9BA8` | Número do versículo (discreto) |
+| `--color-accent` | `#0077B6` | Azul oceano — CTAs, favoritos, destaques |
+| `--color-highlight-yellow` | `#F5E6B8` | Highlight amarelo pastel |
+| `--color-highlight-green` | `#D4E8D0` | Highlight verde pastel |
+| `--color-highlight-rose` | `#F0D4D4` | Highlight rosa pastel |
+| `--color-border` | `#CED8DF` | Bordas e divisores |
+
+### Modo Laranja (Orange)
+| Token | Hex | Role |
+|:---|:---|:---|
+| `--color-bg` | `#FFFDF9` | Fundo principal de leitura (creme alaranjado) |
+| `--color-surface` | `#FEF3E2` | Superfície de cards e contêineres |
+| `--color-surface-raised` | `#FFEDD0` | Elementos elevados / hover |
+| `--color-text` | `#3D2800` | Texto principal (marrom escuro) |
+| `--color-text-secondary` | `#704D2A` | Texto secundário / subtitulos |
+| `--color-text-muted` | `#9A7560` | Hints, placeholders, disabled |
+| `--color-verse-number` | `#B8947A` | Número do versículo (discreto) |
+| `--color-accent` | `#CC6A00` | Laranja vibrante — CTAs, favoritos, destaques |
+| `--color-highlight-yellow` | `#FFE8B8` | Highlight amarelo pastel |
+| `--color-highlight-green` | `#E8F0D8` | Highlight verde pastel |
+| `--color-highlight-rose` | `#FCE8E8` | Highlight rosa pastel |
+| `--color-border` | `#EDE3D6` | Bordas e divisores |
+
 ## 3. Typography Rules
 
 | Role | Font | Weight | Size | Usage |
