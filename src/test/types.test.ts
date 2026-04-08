@@ -15,6 +15,9 @@ import type {
   BibleTranslation,
   CrossReferenceEntry,
   CrossReferenceMap,
+  BibleChapterResult,
+  BibleQueryError,
+  BibleQueryResult,
 } from '@/types'
 
 describe('Type exports', () => {
@@ -155,5 +158,84 @@ describe('Type exports', () => {
       'jude', 'revelation',
     ]
     expect(bookIds).toHaveLength(66)
+  })
+})
+
+describe('BibleQueryResult types', () => {
+  it('BibleChapterResult accepts correct shape', () => {
+    const chapterResult: BibleChapterResult = {
+      type: 'chapter',
+      bookId: 'genesis',
+      chapter: 1,
+      displayName: 'Gênesis 1',
+    }
+    expect(chapterResult.type).toBe('chapter')
+    expect(chapterResult.bookId).toBe('genesis')
+    expect(chapterResult.chapter).toBe(1)
+    expect(chapterResult.displayName).toBe('Gênesis 1')
+  })
+
+  it('BibleQueryError accepts book_not_found errorKind', () => {
+    const error: BibleQueryError = {
+      type: 'error',
+      errorKind: 'book_not_found',
+      message: 'Livro não encontrado',
+    }
+    expect(error.type).toBe('error')
+    expect(error.errorKind).toBe('book_not_found')
+    expect(error.message).toBe('Livro não encontrado')
+  })
+
+  it('BibleQueryError accepts chapter_out_of_range errorKind', () => {
+    const error: BibleQueryError = {
+      type: 'error',
+      errorKind: 'chapter_out_of_range',
+      message: 'Capítulo não existe',
+    }
+    expect(error.errorKind).toBe('chapter_out_of_range')
+  })
+
+  it('BibleQueryError accepts invalid_format errorKind', () => {
+    const error: BibleQueryError = {
+      type: 'error',
+      errorKind: 'invalid_format',
+      message: 'Formato inválido',
+    }
+    expect(error.errorKind).toBe('invalid_format')
+  })
+
+  it('BibleQueryResult union accepts BibleChapterResult', () => {
+    const result: BibleQueryResult = {
+      type: 'chapter',
+      bookId: 'john',
+      chapter: 3,
+      displayName: 'João 3',
+    }
+    expect(result.type).toBe('chapter')
+  })
+
+  it('BibleQueryResult union accepts BibleQueryError', () => {
+    const result: BibleQueryResult = {
+      type: 'error',
+      errorKind: 'book_not_found',
+      message: 'Not found',
+    }
+    expect(result.type).toBe('error')
+  })
+
+  it('BibleQueryResult union accepts null', () => {
+    const result: BibleQueryResult = null
+    expect(result).toBeNull()
+  })
+
+  it('BibleChapterResult can be used as BibleQueryResult', () => {
+    const toResult = (chapter: BibleChapterResult): BibleQueryResult => chapter
+    const result = toResult({
+      type: 'chapter',
+      bookId: 'romans',
+      chapter: 8,
+      displayName: 'Romanos 8',
+    })
+    expect((result as BibleChapterResult).type).toBe('chapter')
   })
 })

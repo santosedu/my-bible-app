@@ -103,3 +103,18 @@ export type CrossReferenceMap = Record<
   string,
   Record<number, Record<number, CrossReferenceEntry[]>>
 >
+
+export interface BibleChapterResult {
+  type: 'chapter'
+  bookId: string
+  chapter: number
+  displayName: string
+}
+
+export interface BibleQueryError {
+  type: 'error'
+  errorKind: 'book_not_found' | 'chapter_out_of_range' | 'invalid_format'
+  message: string
+}
+
+export type BibleQueryResult = BibleChapterResult | BibleQueryError | null

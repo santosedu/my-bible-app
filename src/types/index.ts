@@ -9,4 +9,7 @@ export type {
   BibleTranslation,
   CrossReferenceEntry,
   CrossReferenceMap,
+  BibleChapterResult,
+  BibleQueryError,
+  BibleQueryResult,
 } from './bible'
