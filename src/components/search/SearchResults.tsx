@@ -40,8 +40,8 @@ export function SearchResults({ results, query }: SearchResultsProps) {
   const navigate = useNavigate()
   const groupedResults = groupByBook(results)
 
-  const handleResultClick = (bookId: string, chapter: number) => {
-    navigate(`/${bookId}/${chapter}`)
+  const handleResultClick = (bookId: string, chapter: number, verse: number) => {
+    navigate(`/${bookId}/${chapter}?verse=${verse}`)
   }
 
   if (results.length === 0) {
@@ -83,7 +83,7 @@ export function SearchResults({ results, query }: SearchResultsProps) {
               {bookResults.map((result) => (
                 <button
                   key={`${result.bookId}-${result.chapter}-${result.verse}`}
-                  onClick={() => handleResultClick(result.bookId, result.chapter)}
+                  onClick={() => handleResultClick(result.bookId, result.chapter, result.verse)}
                   className="w-full text-left p-3 bg-[var(--color-surface)] rounded-lg hover:bg-[var(--color-surface-raised)] transition-colors"
                 >
                   <div className="flex items-baseline gap-2 mb-1">

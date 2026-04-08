@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, waitFor, fireEvent } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, MemoryRouter, Routes, Route, useLocation } from 'react-router'
 import userEvent from '@testing-library/user-event'
 import { useBibleStore } from '@/stores'
 import { SearchInput } from '@/components/search/SearchInput'
@@ -236,7 +236,7 @@ describe('SearchPage', () => {
 })
 
 describe('Search navigation', () => {
-  it('navigates to passage when clicking a result', async () => {
+  it('navigates to passage with verse parameter when clicking a result', async () => {
     const user = userEvent.setup()
     const mockResults: SearchResult[] = [
       {
@@ -262,5 +262,56 @@ describe('Search navigation', () => {
     await user.click(button)
 
     expect(screen.getByTestId('chapter-page')).toBeDefined()
+  })
+
+  it('includes correct verse number in navigation URL', async () => {
+    const user = userEvent.setup()
+    const mockResults: SearchResult[] = [
+      {
+        bookId: 'genesis',
+        bookName: 'Gênesis',
+        chapter: 1,
+        verse: 1,
+        text: 'No princípio criou Deus os céus e a terra.',
+        score: 10,
+      },
+      {
+        bookId: 'john',
+        bookName: 'João',
+        chapter: 3,
+        verse: 16,
+        text: 'Porque Deus amou o mundo de tal forma que deu o seu Filho unigênito.',
+        score: 10,
+      },
+    ]
+
+    const LocationChecker = () => {
+      const location = useLocation()
+      return <span data-testid="location">{location.search}</span>
+    }
+
+    render(
+      <MemoryRouter initialEntries={['/search']}>
+        <Routes>
+          <Route path="/search" element={<SearchResults results={mockResults} query="amor" />} />
+          <Route
+            path="/:bookId/:chapter"
+            element={
+              <div data-testid="chapter-page">
+                <LocationChecker />
+              </div>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    const genesisButton = screen.getByText(/No princípio criou Deus/)
+    await user.click(genesisButton)
+
+    await waitFor(() => {
+      const locationSpan = screen.getByTestId('location')
+      expect(locationSpan.textContent).toContain('verse=1')
+    })
   })
 })
