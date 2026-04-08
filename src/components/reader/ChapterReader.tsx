@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { useParams } from 'react-router'
+import { useParams, useSearchParams } from 'react-router'
 import { getChapterSync, getBook, getCrossReferences } from '@/data/bibleData'
 import { translations } from '@/data/translations'
 import { useBibleStore, useProgressStore, useStudyStore } from '@/stores'
@@ -80,9 +80,12 @@ function verseHasNote(
 interface ChapterReaderInnerProps {
   bookId: string
   chapterNum: number
+  targetVerse: number | null
 }
 
-function ChapterReaderInner({ bookId, chapterNum }: ChapterReaderInnerProps) {
+function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderInnerProps) {
+  // targetVerse will be used by downstream tasks (scroll, highlight, exclusive view)
+  void targetVerse
   const setBook = useBibleStore((s) => s.setBook)
   const setChapter = useBibleStore((s) => s.setChapter)
   const comparisonMode = useBibleStore((s) => s.comparisonMode)
@@ -489,6 +492,16 @@ export function ChapterReader() {
     bookId: string
     chapter: string
   }>()
+  const [searchParams] = useSearchParams()
+
+  const verseParam = searchParams.get('verse')
+  const parsedVerse = verseParam ? Number(verseParam) : null
+  const targetVerse =
+    parsedVerse !== null &&
+    Number.isInteger(parsedVerse) &&
+    parsedVerse > 0
+      ? parsedVerse
+      : null
 
   if (!bookId || !chapterParam) {
     return (
@@ -516,6 +529,7 @@ export function ChapterReader() {
       key={`${bookId}:${chapterNum}`}
       bookId={bookId}
       chapterNum={chapterNum}
+      targetVerse={targetVerse}
     />
   )
 }

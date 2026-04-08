@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, fireEvent, waitFor, within } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter, Routes, Route } from 'react-router'
+import { BrowserRouter, MemoryRouter, Routes, Route, useSearchParams } from 'react-router'
 import userEvent from '@testing-library/user-event'
 import { useBibleStore, useProgressStore, useThemeStore } from '@/stores'
 import { ChapterReader } from '@/components/reader/ChapterReader'
@@ -329,6 +329,124 @@ describe('ChapterReader', () => {
   })
 })
 
+const VerseParamCapture = ({ children }: { children: React.ReactNode }) => {
+  const [searchParams] = useSearchParams()
+  const verseParam = searchParams.get('verse')
+  const parsedVerse = verseParam ? Number(verseParam) : null
+  const targetVerse =
+    parsedVerse !== null &&
+    Number.isInteger(parsedVerse) &&
+    parsedVerse > 0
+      ? parsedVerse
+      : null
+  return (
+    <>
+      {children}
+      <div
+        data-testid="verse-param-capture"
+        data-target-verse={targetVerse ?? 'null'}
+      />
+    </>
+  )
+}
+
+function renderWithMemoryRouterAndVerseCapture(initialEntry: string) {
+  return render(
+    <MemoryRouter initialEntries={[initialEntry]}>
+      <VerseParamCapture>
+        <Routes>
+          <Route path="/:bookId/:chapter" element={<ChapterReader />} />
+          <Route path="*" element={<div>Not found</div>} />
+        </Routes>
+      </VerseParamCapture>
+    </MemoryRouter>,
+  )
+}
+
+function renderWithVerseCapture(initialEntry: string) {
+  return render(
+    <MemoryRouter initialEntries={[initialEntry]}>
+      <VerseParamCapture>
+        <Routes>
+          <Route path="/search" element={<div>Search</div>} />
+          <Route path="/:bookId/:chapter" element={<ChapterReader />} />
+          <Route path="*" element={<div>Not found</div>} />
+        </Routes>
+      </VerseParamCapture>
+    </MemoryRouter>,
+  )
+}
+
+describe('ChapterReader - verse query param', () => {
+  it('passes targetVerse=5 when ?verse=5 is in the URL', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('5')
+  })
+
+  it('passes targetVerse=null when no verse param is present', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('null')
+  })
+
+  it('passes targetVerse=null when ?verse=abc (non-numeric)', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1?verse=abc')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('null')
+  })
+
+  it('passes targetVerse=null when ?verse=-1 (negative)', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1?verse=-1')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('null')
+  })
+
+  it('passes targetVerse=null when ?verse=0', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1?verse=0')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('null')
+  })
+
+  it('chapter with verse param renders correctly without verse param affecting content', async () => {
+    renderWithMemoryRouterAndVerseCapture('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const container = screen.getByTestId('verses-container')
+    const verseElements = within(container).getAllByTestId(/^verse-\d+$/)
+    expect(verseElements.length).toBe(31)
+    expect(screen.getByTestId('chapter-heading').textContent).toBe('Gênesis 1')
+  })
+})
+
 describe('ChapterReader - Integration', () => {
   it('navigating between chapters updates the displayed content', async () => {
     renderWithBrowserRouter('/genesis/1')
@@ -378,5 +496,29 @@ describe('ChapterReader - Integration', () => {
         'Romanos 8',
       )
     })
+  })
+
+  it('renders chapter with verse param available after navigation', async () => {
+    renderWithVerseCapture('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const capture = screen.getByTestId('verse-param-capture')
+    expect(capture.getAttribute('data-target-verse')).toBe('5')
+  })
+
+  it('existing chapter rendering is unaffected when no verse param is present', async () => {
+    renderWithBrowserRouter('/genesis/1')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const container = screen.getByTestId('verses-container')
+    const verseElements = within(container).getAllByTestId(/^verse-\d+$/)
+    expect(verseElements.length).toBe(31)
+    expect(screen.getByTestId('chapter-heading').textContent).toBe('Gênesis 1')
   })
 })
