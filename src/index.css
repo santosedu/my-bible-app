@@ -378,6 +378,17 @@ body {
   margin-left: 0.125rem;
 }
 
+.verse-target-highlight {
+  box-shadow: 0 0 0 3px var(--color-accent), 0 0 12px 2px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verse-target-highlight {
+    box-shadow: 0 0 0 3px var(--color-accent);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;

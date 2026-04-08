@@ -133,6 +133,30 @@ describe('VerseBlock', () => {
     fireEvent.keyDown(screen.getByTestId('verse-1'), { key: ' ' })
     expect(onSelect).toHaveBeenCalledWith(1, false)
   })
+
+  it('applies verse-target-highlight class when isTargetVerse=true', () => {
+    const onSelect = vi.fn()
+    render(<VerseBlock verse={verse} isSelected={false} onSelect={onSelect} isTargetVerse={true} />)
+
+    const block = screen.getByTestId('verse-1')
+    expect(block.className).toContain('verse-target-highlight')
+  })
+
+  it('does not apply verse-target-highlight class when isTargetVerse=false', () => {
+    const onSelect = vi.fn()
+    render(<VerseBlock verse={verse} isSelected={false} onSelect={onSelect} isTargetVerse={false} />)
+
+    const block = screen.getByTestId('verse-1')
+    expect(block.className).not.toContain('verse-target-highlight')
+  })
+
+  it('does not apply verse-target-highlight class when isTargetVerse is undefined', () => {
+    const onSelect = vi.fn()
+    render(<VerseBlock verse={verse} isSelected={false} onSelect={onSelect} />)
+
+    const block = screen.getByTestId('verse-1')
+    expect(block.className).not.toContain('verse-target-highlight')
+  })
 })
 
 describe('ChapterReader', () => {
@@ -376,6 +400,96 @@ function renderWithVerseCapture(initialEntry: string) {
     </MemoryRouter>,
   )
 }
+
+describe('ChapterReader - scroll to target verse', () => {
+  it('calls scrollIntoView when targetVerse is set', async () => {
+    const scrollMock = vi.spyOn(Element.prototype, 'scrollIntoView')
+
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    expect(scrollMock).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' })
+  })
+
+  it('does not call scrollIntoView when no targetVerse is present', async () => {
+    renderWithMemoryRouter('/genesis/1')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const verse1 = screen.getByTestId('verse-1')
+    const verse5 = screen.getByTestId('verse-5')
+    expect(verse1.className).not.toContain('verse-target-highlight')
+    expect(verse5.className).not.toContain('verse-target-highlight')
+  })
+
+  it('target verse element has verse-target-highlight class', async () => {
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const verse5 = screen.getByTestId('verse-5')
+    expect(verse5.className).toContain('verse-target-highlight')
+  })
+
+  it('other verses do not have verse-target-highlight class', async () => {
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const verse1 = screen.getByTestId('verse-1')
+    const verse10 = screen.getByTestId('verse-10')
+    expect(verse1.className).not.toContain('verse-target-highlight')
+    expect(verse10.className).not.toContain('verse-target-highlight')
+  })
+
+  it('clicking any verse clears the target highlight', async () => {
+    const user = userEvent.setup()
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const verse5 = screen.getByTestId('verse-5')
+    expect(verse5.className).toContain('verse-target-highlight')
+
+    await user.click(screen.getByTestId('verse-2'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('verse-5').className).not.toContain('verse-target-highlight')
+    })
+  })
+
+  it('shift+clicking any verse clears the target highlight', async () => {
+    const user = userEvent.setup()
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    const verse5 = screen.getByTestId('verse-5')
+    expect(verse5.className).toContain('verse-target-highlight')
+
+    await user.click(screen.getByTestId('verse-1'))
+    await user.keyboard('{Shift>}')
+    await user.click(screen.getByTestId('verse-3'))
+    await user.keyboard('{/Shift}')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('verse-5').className).not.toContain('verse-target-highlight')
+    })
+  })
+})
 
 describe('ChapterReader - verse query param', () => {
   it('passes targetVerse=5 when ?verse=5 is in the URL', async () => {

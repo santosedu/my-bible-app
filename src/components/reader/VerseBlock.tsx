@@ -8,6 +8,7 @@ interface VerseBlockProps {
   highlightColor?: HighlightColor | null
   hasNote?: boolean
   hasCrossReferences?: boolean
+  isTargetVerse?: boolean
   onSelect: (verseNumber: number, shiftKey: boolean) => void
   onCrossReferenceClick?: () => void
 }
@@ -18,6 +19,7 @@ export const VerseBlock = memo(function VerseBlock({
   highlightColor,
   hasNote,
   hasCrossReferences,
+  isTargetVerse,
   onSelect,
   onCrossReferenceClick,
 }: VerseBlockProps) {
@@ -28,6 +30,8 @@ export const VerseBlock = memo(function VerseBlock({
   const ringClass = isSelected
     ? 'ring-2 ring-inset ring-[var(--color-accent)]/50'
     : ''
+
+  const targetClass = isTargetVerse ? 'verse-target-highlight' : ''
 
   return (
     <span
@@ -49,6 +53,7 @@ export const VerseBlock = memo(function VerseBlock({
         'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[var(--color-accent)]',
         bgClass,
         ringClass,
+        targetClass,
       ].filter(Boolean).join(' ')}
     >
       <sup className="font-verse-number mr-0.5 select-none">{verse.number}</sup>

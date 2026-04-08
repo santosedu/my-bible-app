@@ -84,8 +84,7 @@ interface ChapterReaderInnerProps {
 }
 
 function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderInnerProps) {
-  // targetVerse will be used by downstream tasks (scroll, highlight, exclusive view)
-  void targetVerse
+  const [isTargetVerse, setIsTargetVerse] = useState<number | null>(targetVerse)
   const setBook = useBibleStore((s) => s.setBook)
   const setChapter = useBibleStore((s) => s.setChapter)
   const comparisonMode = useBibleStore((s) => s.comparisonMode)
@@ -149,6 +148,18 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
   }, [bookId, chapterNum, setBook, setChapter])
 
   useEffect(() => {
+    setIsTargetVerse(targetVerse)
+  }, [targetVerse])
+
+  useEffect(() => {
+    if (!isTargetVerse) return
+    const el = document.querySelector(`[data-verse-number="${isTargetVerse}"]`)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [isTargetVerse])
+
+  useEffect(() => {
     const sentinel = sentinelRef.current
     if (!sentinel) return
 
@@ -192,6 +203,7 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
 
   const handleVerseSelect = useCallback(
     (verseNumber: number, shiftKey: boolean) => {
+      setIsTargetVerse(null)
       if (shiftKey && selectedAnchor !== null) {
         setSelectionRange({
           start: Math.min(selectedAnchor, verseNumber),
@@ -470,6 +482,7 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
                 highlightColor={getVerseHighlightColor(verse.number)}
                 hasNote={getVerseHasNote(verse.number)}
                 hasCrossReferences={getVerseCrossReferences(verse.number).length > 0}
+                isTargetVerse={isTargetVerse === verse.number}
                 onSelect={handleVerseSelect}
                 onCrossReferenceClick={() => handleCrossReferenceClick(verse.number)}
               />
