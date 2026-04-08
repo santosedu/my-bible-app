@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.66% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/15</span>
+                <span class='fraction'>20/22</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.66% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/15</span>
+                <span class='fraction'>20/22</span>
             </div>
         
             
@@ -135,7 +135,14 @@
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
 <a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,30 +151,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -207,7 +221,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback } from 'react'
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 &nbsp;
 interface SearchInputProps {
@@ -218,23 +232,30 @@ interface SearchInputProps {
 export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+  const timerRef = useRef&lt;ReturnType&lt;typeof setTimeout&gt;&gt;(undefined)
 &nbsp;
   const urlQuery = searchParams.get('q') || ''
-  const query = urlQuery || initialQuery
+  const [localValue, setLocalValue] = useState(urlQuery || initialQuery)
 &nbsp;
   const handleChange = useCallback((e: React.ChangeEvent&lt;HTMLInputElement&gt;) =&gt; {
     const value = e.target.value
-&nbsp;
-    if (value.trim()) {
-      navigate(`/search?q=${encodeURIComponent(value.trim())}`, { replace: true })
-      onSearch(value.trim())
-    } else <span class="missing-if-branch" title="else path not taken" >E</span>{
-<span class="cstat-no" title="statement not covered" >      navigate('/search', { replace: true })</span>
-<span class="cstat-no" title="statement not covered" >      onSearch('')</span>
-    }
+    setLocalValue(value)
+    const trimmed = value.trim()
+    clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() =&gt; {
+      if (trimmed) {
+        navigate(`/search?q=${encodeURIComponent(trimmed)}`, { replace: true })
+        onSearch(trimmed)
+      } else <span class="missing-if-branch" title="else path not taken" >E</span>{
+<span class="cstat-no" title="statement not covered" >        navigate('/search', { replace: true })</span>
+<span class="cstat-no" title="statement not covered" >        onSearch('')</span>
+      }
+    }, 250)
   }, [navigate, onSearch])
 &nbsp;
   const handleClear = useCallback(() =&gt; {
+    clearTimeout(timerRef.current)
+    setLocalValue('')
     navigate('/search', { replace: true })
     onSearch('')
   }, [navigate, onSearch])
@@ -258,13 +279,13 @@ export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
       &lt;/div&gt;
       &lt;input
         type="text"
-        defaultValue={query}
+        value={localValue}
         onChange={handleChange}
         placeholder="Buscar na Bíblia..."
         className="w-full h-12 pl-12 pr-12 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-lg font-ui text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:border-[var(--color-accent)]"
         aria-label="Buscar na Bíblia"
       /&gt;
-      {query &amp;&amp; (
+      {localValue &amp;&amp; (
         &lt;button
           onClick={handleClear}
           className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
@@ -286,7 +307,7 @@ export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-04-06T16:40:19.292Z
+                at 2026-04-08T03:35:35.545Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
