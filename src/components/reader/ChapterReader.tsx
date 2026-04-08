@@ -85,6 +85,7 @@ interface ChapterReaderInnerProps {
 
 function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderInnerProps) {
   const [isTargetVerse, setIsTargetVerse] = useState<number | null>(targetVerse)
+  const [exclusiveVerse, setExclusiveVerse] = useState(false)
   const setBook = useBibleStore((s) => s.setBook)
   const setChapter = useBibleStore((s) => s.setChapter)
   const comparisonMode = useBibleStore((s) => s.comparisonMode)
@@ -149,6 +150,10 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
 
   useEffect(() => {
     setIsTargetVerse(targetVerse)
+  }, [targetVerse])
+
+  useEffect(() => {
+    setExclusiveVerse(false)
   }, [targetVerse])
 
   useEffect(() => {
@@ -394,6 +399,30 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
         </h1>
         <div className="flex items-center gap-2">
           <BookmarkButton bookId={bookId} chapter={chapterNum} />
+          {targetVerse !== null && !comparisonMode && !exclusiveVerse && (
+            <button
+              data-testid="exclusive-verse-toggle"
+              onClick={() => setExclusiveVerse(true)}
+              className="chip"
+              aria-label="Ver apenas este versículo"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="mr-1"
+              >
+                <circle cx="8" cy="8" r="3" />
+                <path d="M8 2v2M8 12v2M2 8h2M12 8h2" />
+              </svg>
+              Ver só este
+            </button>
+          )}
           <button
             data-testid="comparison-toggle"
             onClick={handleToggleComparison}
@@ -473,21 +502,56 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
               </div>
             </div>
           )}
-          <div className="font-reading" data-testid="verses-container">
-            {verses.map((verse) => (
-              <VerseBlock
-                key={verse.number}
-                verse={verse}
-                isSelected={isVerseSelected(verse.number)}
-                highlightColor={getVerseHighlightColor(verse.number)}
-                hasNote={getVerseHasNote(verse.number)}
-                hasCrossReferences={getVerseCrossReferences(verse.number).length > 0}
-                isTargetVerse={isTargetVerse === verse.number}
-                onSelect={handleVerseSelect}
-                onCrossReferenceClick={() => handleCrossReferenceClick(verse.number)}
-              />
-            ))}
-          </div>
+          {exclusiveVerse && targetVerse ? (
+            <div data-testid="exclusive-verse-view" className="py-8">
+              <p className="font-ui text-[var(--color-text-secondary)] mb-6 text-center">
+                {bookName} {chapterNum}:{targetVerse}
+              </p>
+              <div className="max-w-2xl mx-auto">
+                {(() => {
+                  const targetVerseObj = verses.find(v => v.number === targetVerse)
+                  if (!targetVerseObj) return null
+                  return (
+                    <VerseBlock
+                      verse={targetVerseObj}
+                      isSelected={false}
+                      highlightColor={null}
+                      hasNote={getVerseHasNote(targetVerse)}
+                      hasCrossReferences={getVerseCrossReferences(targetVerse).length > 0}
+                      isTargetVerse={true}
+                      onSelect={() => {}}
+                      onCrossReferenceClick={() => handleCrossReferenceClick(targetVerse)}
+                    />
+                  )
+                })()}
+              </div>
+              <div className="flex justify-center mt-8">
+                <button
+                  data-testid="exit-exclusive-mode"
+                  onClick={() => setExclusiveVerse(false)}
+                  className="btn-ghost"
+                >
+                  Ver capítulo completo
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="font-reading" data-testid="verses-container">
+              {verses.map((verse) => (
+                <VerseBlock
+                  key={verse.number}
+                  verse={verse}
+                  isSelected={isVerseSelected(verse.number)}
+                  highlightColor={getVerseHighlightColor(verse.number)}
+                  hasNote={getVerseHasNote(verse.number)}
+                  hasCrossReferences={getVerseCrossReferences(verse.number).length > 0}
+                  isTargetVerse={isTargetVerse === verse.number}
+                  onSelect={handleVerseSelect}
+                  onCrossReferenceClick={() => handleCrossReferenceClick(verse.number)}
+                />
+              ))}
+            </div>
+          )}
           <CrossReferencePanel
             references={crossRefPanel?.references ?? []}
             isOpen={crossRefPanel !== null}

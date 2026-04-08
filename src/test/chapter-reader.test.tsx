@@ -636,3 +636,147 @@ describe('ChapterReader - Integration', () => {
     expect(screen.getByTestId('chapter-heading').textContent).toBe('Gênesis 1')
   })
 })
+
+describe('ChapterReader - Exclusive verse mode', () => {
+  it('toggle button is visible when targetVerse is set', async () => {
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+  })
+
+  it('toggle button is NOT visible when targetVerse is null', async () => {
+    renderWithMemoryRouter('/genesis/1')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    expect(screen.queryByTestId('exclusive-verse-toggle')).toBeNull()
+  })
+
+  it('toggle button is NOT visible in comparison mode', async () => {
+    useBibleStore.setState({
+      comparisonMode: true,
+      comparisonTranslations: ['nvi', 'acf'],
+    })
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-reader')).toBeDefined()
+    })
+
+    expect(screen.queryByTestId('exclusive-verse-toggle')).toBeNull()
+  })
+
+  it('clicking toggle activates exclusive mode - only target verse renders', async () => {
+    const user = userEvent.setup()
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exclusive-verse-toggle'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-view')).toBeDefined()
+    })
+
+    expect(screen.queryByTestId('verses-container')).toBeNull()
+
+    const exclusiveView = screen.getByTestId('exclusive-verse-view')
+    expect(within(exclusiveView).getByTestId('verse-5')).toBeDefined()
+  })
+
+  it('exclusive mode displays reference label (book + chapter + verse)', async () => {
+    const user = userEvent.setup()
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exclusive-verse-toggle'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-view')).toBeDefined()
+    })
+
+    expect(screen.getByText('Gênesis 1:5')).toBeDefined()
+  })
+
+  it('clicking exit button deactivates exclusive mode and restores full chapter', async () => {
+    const user = userEvent.setup()
+    renderWithMemoryRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exclusive-verse-toggle'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exit-exclusive-mode')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exit-exclusive-mode'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('verses-container')).toBeDefined()
+    })
+
+    expect(screen.queryByTestId('exclusive-verse-view')).toBeNull()
+
+    const container = screen.getByTestId('verses-container')
+    const verseElements = within(container).getAllByTestId(/^verse-\d+$/)
+    expect(verseElements.length).toBe(31)
+  })
+
+  it('exclusive mode clears when targetVerse becomes null (navigating without verse param)', async () => {
+    const user = userEvent.setup()
+    renderWithBrowserRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exclusive-verse-toggle'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-view')).toBeDefined()
+    })
+
+    window.history.pushState({}, 'Test', '/genesis/1')
+    window.dispatchEvent(new PopStateEvent('popstate', { state: {} }))
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('exclusive-verse-view')).toBeNull()
+    })
+  })
+
+  it('exclusive mode clears when navigating to different chapter', async () => {
+    const user = userEvent.setup()
+    renderWithBrowserRouter('/genesis/1?verse=5')
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-toggle')).toBeDefined()
+    })
+
+    await user.click(screen.getByTestId('exclusive-verse-toggle'))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('exclusive-verse-view')).toBeDefined()
+    })
+
+    window.history.pushState({}, 'Test', '/genesis/2')
+    window.dispatchEvent(new PopStateEvent('popstate', { state: {} }))
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-heading').textContent).toBe('Gênesis 2')
+    })
+
+    expect(screen.queryByTestId('exclusive-verse-view')).toBeNull()
+  })
+})
