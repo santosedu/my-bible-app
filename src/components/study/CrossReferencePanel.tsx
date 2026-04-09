@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { getBook, getVerseSync } from '@/data/bibleData'
 import type { BibleRef } from '@/types'
@@ -44,8 +44,15 @@ function CrossReferenceItem({ reference, onNavigate }: CrossReferenceItemProps) 
   )
 }
 
+function getFocusableElements(container: HTMLElement): HTMLElement[] {
+  const selector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+  return Array.from(container.querySelectorAll<HTMLElement>(selector))
+}
+
 export function CrossReferencePanel({ references, isOpen, onClose }: CrossReferencePanelProps) {
   const navigate = useNavigate()
+  const panelRef = useRef<HTMLDivElement>(null)
+  const previousFocusRef = useRef<HTMLElement | null>(null)
 
   const handleNavigate = useCallback((bookId: string, chapter: number) => {
     navigate(`/${bookId}/${chapter}`)
@@ -55,25 +62,64 @@ export function CrossReferencePanel({ references, isOpen, onClose }: CrossRefere
   useEffect(() => {
     if (!isOpen) return
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose()
+    previousFocusRef.current = document.activeElement as HTMLElement
+
+    const focusFirst = () => {
+      if (panelRef.current) {
+        const focusable = getFocusableElements(panelRef.current)
+        if (focusable.length > 0) {
+          focusable[0].focus()
+        } else {
+          panelRef.current.focus()
+        }
       }
     }
 
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
+    const timer = setTimeout(focusFirst, 0)
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onClose()
+        return
+      }
+
+      if (e.key === 'Tab' && panelRef.current) {
+        const focusable = getFocusableElements(panelRef.current)
+        if (focusable.length === 0) return
+
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener('keydown', handleKeyDown)
+      previousFocusRef.current?.focus()
+    }
   }, [isOpen, onClose])
 
   if (!isOpen) return null
 
   return (
     <div
+      ref={panelRef}
       data-testid="cross-reference-panel"
       role="dialog"
       aria-modal="true"
       aria-labelledby="cross-reference-title"
-      className="flex flex-col"
+      tabIndex={-1}
+      className="flex flex-col outline-none"
     >
       <div className="mb-2 flex items-center justify-between">
         <h2
@@ -83,12 +129,26 @@ export function CrossReferencePanel({ references, isOpen, onClose }: CrossRefere
         >
           Referências Cruzadas
         </h2>
-        <span
-          data-testid="cross-reference-panel-count"
-          className="font-footnote text-[var(--color-text-muted)]"
-        >
-          {references.length} {references.length === 1 ? 'referência' : 'referências'}
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            data-testid="cross-reference-panel-count"
+            className="font-footnote text-[var(--color-text-muted)]"
+          >
+            {references.length} {references.length === 1 ? 'referência' : 'referências'}
+          </span>
+          <button
+            data-testid="cross-reference-panel-close"
+            onClick={onClose}
+            className="btn-ghost"
+            aria-label="Fechar referências cruzadas"
+            type="button"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <line x1="4" y1="4" x2="12" y2="12" />
+              <line x1="12" y1="4" x2="4" y2="12" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {references.length === 0 ? (

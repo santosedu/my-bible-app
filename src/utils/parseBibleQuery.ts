@@ -1,14 +1,6 @@
 import type { BibleQueryResult, BibleChapterResult, BibleQueryError } from '@/types'
 import { resolveBookAlias } from '@/data/bibleAliases'
-
-function normalize(text: string): string {
-  return text
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .replace(/\s+/g, ' ')
-}
+import { normalize } from '@/utils/normalize'
 
 function extractTrailingNumber(input: string): { number: number; remaining: string } | null {
   const tokens = input.split(' ').filter((t) => t.length > 0)

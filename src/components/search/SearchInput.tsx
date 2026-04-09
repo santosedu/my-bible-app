@@ -2,7 +2,7 @@ import { useState, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 
 interface SearchInputProps {
-  onSearch: (query: string) => void
+  onSearch?: (query: string) => void
   initialQuery?: string
 }
 
@@ -22,10 +22,10 @@ export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
     timerRef.current = setTimeout(() => {
       if (trimmed) {
         navigate(`/search?q=${encodeURIComponent(trimmed)}`, { replace: true })
-        onSearch(trimmed)
+        onSearch?.(trimmed)
       } else {
         navigate('/search', { replace: true })
-        onSearch('')
+        onSearch?.('')
       }
     }, 250)
   }, [navigate, onSearch])
@@ -34,7 +34,7 @@ export function SearchInput({ onSearch, initialQuery = '' }: SearchInputProps) {
     clearTimeout(timerRef.current)
     setLocalValue('')
     navigate('/search', { replace: true })
-    onSearch('')
+    onSearch?.('')
   }, [navigate, onSearch])
 
   return (

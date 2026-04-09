@@ -14,16 +14,28 @@ function highlightText(text: string, query: string): React.ReactNode {
   const queryWords = normalizedQuery.split(/\s+/).filter((w) => w.length >= 2)
   if (queryWords.length === 0) return text
 
+  const normalizedText = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   const regex = new RegExp(`(${queryWords.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi')
-  const parts = text.split(regex)
+  const parts = normalizedText.split(regex)
 
-  return parts.map((part, i) => {
-    const isMatch = queryWords.some((w) => part.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').includes(w))
+  let origIdx = 0
+  const result: React.ReactNode[] = []
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i]
+    const isMatch = queryWords.some((w) => part.toLowerCase().includes(w))
+    const origPart = text.slice(origIdx, origIdx + part.length)
+    origIdx += part.length
+
     if (isMatch) {
-      return <mark key={i} className="bg-[var(--color-highlight-yellow)] font-semibold">{part}</mark>
+      result.push(
+        <mark key={i} className="bg-[var(--color-highlight-yellow)] font-semibold">{origPart}</mark>,
+      )
+    } else {
+      result.push(origPart)
     }
-    return part
-  })
+  }
+
+  return result
 }
 
 function groupByBook(results: SearchResult[]): Map<string, SearchResult[]> {

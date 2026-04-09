@@ -71,7 +71,7 @@ export type TranslationId = 'ara' | 'acf' | 'nvi'
 export type BibleBookData = Record<BookId, Record<number, Record<number, string>>>
 
 export interface BookMeta {
-  id: string
+  id: BookId
   name: string
   abbrev: string
   testament: 'old' | 'new'
@@ -106,14 +106,14 @@ export type CrossReferenceMap = Record<
 
 export interface BibleChapterResult {
   type: 'chapter'
-  bookId: string
+  bookId: BookId
   chapter: number
   displayName: string
 }
 
 export interface BibleQueryError {
   type: 'error'
-  errorKind: 'book_not_found' | 'chapter_out_of_range' | 'invalid_format'
+  errorKind: 'book_not_found' | 'chapter_out_of_range'
   message: string
 }
 

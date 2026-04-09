@@ -18,11 +18,7 @@ describe('resolveBookAlias', () => {
       it(`resolves abbreviation "${book.abbrev}" -> ${book.id}`, () => {
         const result = resolveBookAlias(book.abbrev)
         expect(result).not.toBeNull()
-        if (book.id === 'john' && book.abbrev === 'Jo') {
-          expect(['job', 'john']).toContain(result!.id)
-        } else {
-          expect(result!.id).toBe(book.id)
-        }
+        expect(result!.id).toBe(book.id)
       })
     })
   })
@@ -41,7 +37,6 @@ describe('resolveBookAlias', () => {
     const diacriticChecks: Array<{ input: string; expectedId: string }> = [
       { input: 'Genesis', expectedId: 'genesis' },
       { input: 'genesis', expectedId: 'genesis' },
-      { input: 'Joao', expectedId: 'john' },
       { input: 'Joao', expectedId: 'john' },
       { input: 'Isaias', expectedId: 'isaiah' },
       { input: 'Jeremias', expectedId: 'jeremiah' },
@@ -173,6 +168,14 @@ describe('resolveBookAlias', () => {
       expect(result).toHaveProperty('abbrev', 'Gn')
       expect(result).toHaveProperty('testament', 'old')
       expect(result).toHaveProperty('chapters', 50)
+    })
+  })
+
+  describe('abbreviation collision tiebreaker', () => {
+    it('resolves "Jo" to john (exact match), not job (accent-stripped)', () => {
+      const result = resolveBookAlias('Jo')
+      expect(result).not.toBeNull()
+      expect(result!.id).toBe('john')
     })
   })
 })

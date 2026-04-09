@@ -4,6 +4,7 @@ import { useBibleStore } from '@/stores'
 import { ChapterReader } from '@/components/reader/ChapterReader'
 import { ChapterGrid } from '@/components/navigation/ChapterGrid'
 import { ProgressPage as ProgressPageComponent } from '@/components/progress/ProgressPage'
+import { StudyPanel } from '@/components/study/StudyPanel'
 import { getBookMeta } from '@/data/books'
 
 export function RootRedirect() {
@@ -55,4 +56,22 @@ export function ChapterPage() {
 
 export function ProgressPage() {
   return <ProgressPageComponent />
+}
+
+export function BookmarksPage() {
+  return (
+    <div className="space-y-4" data-testid="bookmarks-page">
+      <h1 className="font-book-title text-xl text-[var(--color-text)]">Marcadores</h1>
+      <StudyPanel defaultTab="bookmarks" />
+    </div>
+  )
+}
+
+export function NotesPage() {
+  return (
+    <div className="space-y-4" data-testid="notes-page">
+      <h1 className="font-book-title text-xl text-[var(--color-text)]">Notas</h1>
+      <StudyPanel defaultTab="notes" />
+    </div>
+  )
 }

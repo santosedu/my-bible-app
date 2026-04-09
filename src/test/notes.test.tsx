@@ -418,7 +418,7 @@ describe('ChapterReader - note integration', () => {
 
     await waitFor(() => {
       const indicators = screen.queryAllByTestId('note-indicator')
-      expect(indicators).toHaveLength(1)
+      expect(indicators).toHaveLength(3)
     })
   })
 
@@ -491,11 +491,11 @@ describe('ChapterReader - note persistence', () => {
 
     await waitFor(() => {
       const indicators = screen.queryAllByTestId('note-indicator')
-      expect(indicators).toHaveLength(1)
+      expect(indicators).toHaveLength(2)
     })
 
-    expect(screen.getByTestId('verse-1')).toContainElement(screen.getByTestId('note-indicator'))
-    expect(screen.getByTestId('verse-2')).not.toContainElement(screen.getByTestId('note-indicator'))
+    expect(screen.getByTestId('verse-1')).toContainElement(screen.getAllByTestId('note-indicator')[0])
+    expect(screen.getByTestId('verse-2')).toContainElement(screen.getAllByTestId('note-indicator')[1])
   })
 
   it('editing a note updates the text and persists', async () => {

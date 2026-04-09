@@ -30,19 +30,6 @@ describe('BibleSearchError', () => {
     })
   })
 
-  describe('invalid_format error', () => {
-    it('renders invalid format message', () => {
-      const error: BibleQueryError = {
-        type: 'error',
-        errorKind: 'invalid_format',
-        message: 'Formato inválido. Digite o nome do livro seguido do número do capítulo (ex: João 3).',
-      }
-      render(<BibleSearchError error={error} />)
-
-      expect(screen.getByText(/Formato inválido/)).toBeInTheDocument()
-    })
-  })
-
   describe('rendering attributes', () => {
     it('has data-testid attribute', () => {
       const error: BibleQueryError = {

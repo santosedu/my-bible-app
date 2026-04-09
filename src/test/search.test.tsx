@@ -154,7 +154,7 @@ describe('SearchResults', () => {
 
     expect(screen.getByText('Gênesis')).toBeDefined()
     expect(screen.getByText(/1:1/)).toBeDefined()
-    expect(screen.getByText(/No princípio criou Deus/)).toBeDefined()
+    expect(screen.getByRole('button', { name: /1:1/ })).toBeDefined()
   })
 
   it('shows no results message when results are empty', () => {
@@ -258,7 +258,7 @@ describe('Search navigation', () => {
       </MemoryRouter>,
     )
 
-    const button = screen.getByText(/No princípio criou Deus/)
+    const button = screen.getByRole('button', { name: /1:1/ })
     await user.click(button)
 
     expect(screen.getByTestId('chapter-page')).toBeDefined()

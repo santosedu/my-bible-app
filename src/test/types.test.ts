@@ -195,15 +195,6 @@ describe('BibleQueryResult types', () => {
     expect(error.errorKind).toBe('chapter_out_of_range')
   })
 
-  it('BibleQueryError accepts invalid_format errorKind', () => {
-    const error: BibleQueryError = {
-      type: 'error',
-      errorKind: 'invalid_format',
-      message: 'Formato inválido',
-    }
-    expect(error.errorKind).toBe('invalid_format')
-  })
-
   it('BibleQueryResult union accepts BibleChapterResult', () => {
     const result: BibleQueryResult = {
       type: 'chapter',

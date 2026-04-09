@@ -3,7 +3,7 @@ import { SidebarProvider, useSidebar } from './SidebarContext'
 import { Header } from './Header'
 import { BottomBar } from './BottomBar'
 import { BookList } from '@/components/navigation/BookList'
-import { BookmarksPanel } from '@/components/study/BookmarksPanel'
+import { StudyPanel } from '@/components/study/StudyPanel'
 
 function Sidebar() {
   const { isOpen, close, sidebarRef } = useSidebar()
@@ -33,14 +33,14 @@ function Sidebar() {
   )
 }
 
-function StudyPanelPlaceholder() {
+function StudyPanelDesktop() {
   return (
     <aside
-      className="hidden xl:block w-80 border-l border-[var(--color-border)] bg-[var(--color-bg)] overflow-y-auto"
-      data-testid="study-panel"
+      className="hidden xl:flex xl:w-80 xl:flex-col border-l border-[var(--color-border)] bg-[var(--color-bg)] overflow-y-auto"
+      data-testid="study-panel-desktop"
     >
       <div className="p-4">
-        <BookmarksPanel />
+        <StudyPanel />
       </div>
     </aside>
   )
@@ -60,7 +60,7 @@ function AppShellInner() {
             <Outlet />
           </div>
         </main>
-        <StudyPanelPlaceholder />
+        <StudyPanelDesktop />
       </div>
       <BottomBar />
     </div>

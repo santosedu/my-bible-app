@@ -30,10 +30,18 @@ export function SearchPage() {
   const showError = parsedResult?.type === 'error'
   const showResults = parsedResult === null && initialQuery.trim().length > 0
 
+  if (parsedResult?.type === 'chapter') {
+    return (
+      <div data-testid="search-page">
+        <SearchInput initialQuery={initialQuery} />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-4" data-testid="search-page">
       <h1 className="font-book-title text-xl text-[var(--color-text)]">Buscar</h1>
-      <SearchInput onSearch={() => {}} initialQuery={initialQuery} />
+      <SearchInput initialQuery={initialQuery} />
       {showError && <BibleSearchError error={parsedResult} />}
       {showResults && <SearchResults results={results} query={initialQuery} />}
     </div>

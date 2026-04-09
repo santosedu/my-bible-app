@@ -9,6 +9,8 @@ import {
   ChapterSelectionPage,
   ChapterPage,
   ProgressPage,
+  BookmarksPage,
+  NotesPage,
 } from '@/components/pages'
 import { SearchPage } from '@/components/search/SearchPage'
 import './index.css'
@@ -32,6 +34,8 @@ export function App() {
           <Route path="/:bookId/:chapter" element={<ChapterPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/progress" element={<ProgressPage />} />
+          <Route path="/bookmarks" element={<BookmarksPage />} />
+          <Route path="/notes" element={<NotesPage />} />
         </Route>
       </Routes>
     </ErrorBoundary>

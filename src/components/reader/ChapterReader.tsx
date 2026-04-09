@@ -73,7 +73,8 @@ function verseHasNote(
     (n) =>
       n.bookId === bookId &&
       n.chapter === chapter &&
-      verseNumber === n.startVerse,
+      verseNumber >= n.startVerse &&
+      verseNumber <= (n.endVerse ?? n.startVerse),
   )
 }
 
@@ -160,7 +161,8 @@ function ChapterReaderInner({ bookId, chapterNum, targetVerse }: ChapterReaderIn
     if (!isTargetVerse) return
     const el = document.querySelector(`[data-verse-number="${isTargetVerse}"]`)
     if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      el.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'center' })
     }
   }, [isTargetVerse])
 
